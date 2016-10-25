@@ -2,7 +2,7 @@
 // Simple geometry pass
 // texture coordinates and normals will be ignored.
 
-cbuffer MatrixBuffer : register(cb0)
+cbuffer MatrixBuffer : register(b0)
 {
 	matrix worldMatrix;
 	matrix viewMatrix;
@@ -32,7 +32,7 @@ OutputType main(InputType input)
 	input.position.w = 1.0f;
 
 	
-	input.position.x *=2;
+	input.position.x *=4;
 
 	
 	// Calculate the position of the vertex against the world, view, and projection matrices.

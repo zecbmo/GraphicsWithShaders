@@ -11,7 +11,22 @@ struct InputType
 
 float4 main(InputType input) : SV_TARGET
 {
-	float4 colour = float4(0.0, 1.0, 0.0, 1.0);
+
+
+	float r = 0.0;
+	float g = 0;
+	float b =  1;
+
+	
+	if(fmod(input.position.x, 2) == 0)
+	{
+		r = 1.0;
+	}
+	
+	
+	
+	float4 colour = float4(r, g, b, 1.0);
+	
 
 	return colour;
 }

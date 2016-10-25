@@ -37,6 +37,7 @@ protected:
 	D3D* m_Direct3D;
 	Camera* m_Camera;
 	Timer* m_Timer;
+	bool wireframe_on_;
 };
 
 #endif

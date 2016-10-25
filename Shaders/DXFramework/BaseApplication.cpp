@@ -39,6 +39,7 @@ void BaseApplication::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int 
 	wnd = hwnd;
 	sWidth = screenWidth;
 	sHeight = screenHeight;
+	wireframe_on_ = false;
 
 	// Create the Direct3D object.
 	m_Direct3D = new D3D(screenWidth, screenHeight, VSYNC_ENABLED, hwnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
@@ -159,6 +160,27 @@ void BaseApplication::HandleInput(float frameTime)
 		m_Input->SetKeyUp(VK_SPACE);
 		// if space pressed toggle mouse
 		m_Input->setMouseActive(!m_Input->isMouseActive());
+	}
+	
+
+	//Garys added mess
+	//turn wireframe off and on
+	if (m_Input->isKeyDown('P'))
+	{
+		if (wireframe_on_)
+		{
+			m_Direct3D->TurnOffWireframe();
+			wireframe_on_ = false;
+		}
+		else
+		{
+			m_Direct3D->TurnOnWireframe();
+			wireframe_on_ = true;
+
+		}
+
+		m_Input->SetKeyUp('P');
+	
 	}
 
 	

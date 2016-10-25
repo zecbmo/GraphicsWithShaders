@@ -11,10 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7169974C-40D1-4884-8E97-4A9D907BD9E7}</ProjectGuid>
+    <ProjectGuid>{F66EDD36-313B-45DA-B74F-D80243560E5A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>E01_ColourShader</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <RootNamespace>E02_Texture</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -54,13 +53,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(solutiondir)\Debug;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(solutiondir)\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;DXFramework.lib;dxgi.lib;D3DCompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)/Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;DXFramework.lib;dxgi.lib;D3DCompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,20 +81,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="App1.cpp" />
-    <ClCompile Include="ColourShader.cpp" />
-    <ClCompile Include="DoubleTriangle.cpp" />
-    <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="App1.h" />
-    <ClInclude Include="ColourShader.h" />
-    <ClInclude Include="DoubleTriangle.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DXFramework\DXFramework.vcxproj">
       <Project>{e887c38b-1273-433a-9dac-a153da5cf145}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="App1.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="TextureShader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App1.h" />
+    <ClInclude Include="TextureShader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\texture_ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\texture_vs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

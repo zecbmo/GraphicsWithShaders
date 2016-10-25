@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <FxCompile Include="shaders\horizontalBlur_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\horizontalBlur_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\light_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\light_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\texture_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\texture_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="BoxBlur_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="BoxBlur_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LightShader.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="TextureShader.cpp" />
+    <ClCompile Include="App8.cpp" />
+    <ClCompile Include="HorizontalBlurShader.cpp" />
+    <ClCompile Include="VerticalBlurShader.cpp" />
+    <ClCompile Include="BlurShader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LightShader.h" />
+    <ClInclude Include="TextureShader.h" />
+    <ClInclude Include="App8.h" />
+    <ClInclude Include="HorizontalBlurShader.h" />
+    <ClInclude Include="VerticalBlurShader.h" />
+    <ClInclude Include="BlurShader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{12fabd5d-658c-428a-a9f7-8c3dcfe35f03}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
