@@ -14,6 +14,9 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	// Call super init function (required!)
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
 
+	//Initialise ImGUI
+	ImGui_ImplDX11_Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
+		
 	// Create Mesh object
 	m_Mesh = new SphereMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/brick1.dds");
 	
@@ -61,6 +64,7 @@ App1::~App1()
 	// Run base application deconstructor
 	BaseApplication::~BaseApplication();
 
+	ImGui_ImplDX11_Shutdown();
 	// Release the Direct3D object.
 	if (m_Mesh)
 	{
@@ -120,8 +124,26 @@ bool App1::Render()
 	//render upscaled image
 	RenderScene(m_upsample_render_texture);
 
+
+	ImGui_ImplDX11_NewFrame();
+	{
+
+		ImGui::Begin("Framerate", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+		ImGui::SetWindowSize(ImVec2(200, 30), ImGuiSetCond_FirstUseEver);
+		ImGui::SetWindowPos(ImVec2(2, 2), ImGuiSetCond_FirstUseEver);
+		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
+		ImGui::ShowTestWindow();
+	}
+	ImGui::Render();
+
 	// Present the rendered scene to the screen.
 	m_Direct3D->EndScene();
+
+
+	
+	
+
 
 	return true;
 }

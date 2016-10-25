@@ -4,6 +4,8 @@
 #define _APP1_H
 
 // Includes
+#include "../DXFramework/imgui.h"
+#include "../DXFramework/imgui_impl_dx11.h"
 #include "../DXFramework/baseapplication.h"
 #include "D3D.h"
 #include "../DXFramework/SphereMesh.h"
@@ -13,6 +15,7 @@
 #include "../DXFramework/RenderTexture.h"
 #include "TextureShader.h"
 #include "BlurShader.h"
+
 
 
 class App1 : public BaseApplication

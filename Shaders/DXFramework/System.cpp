@@ -175,7 +175,7 @@ void System::InitializeWindows(int& screenWidth, int& screenHeight)
 	SetFocus(m_hwnd);
 
 	// Hide the mouse cursor.
-	ShowCursor(false);
+	ShowCursor(true);
 
 	return;
 }
@@ -206,10 +206,10 @@ void System::ShutdownWindows()
 	return;
 }
 
-
+extern LRESULT ImGui_ImplDX11_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK System::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
-
+	
 	switch (umessage)
 	{
 		// Handle keyboard and mouse input.
@@ -264,5 +264,9 @@ LRESULT CALLBACK System::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM
 		}
 
 	}
+
+	if (ImGui_ImplDX11_WndProcHandler(hwnd, umessage, wparam, lparam))
+		return true;
+
 	return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
 }
