@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXFramework", "DXFramework\DXFramework.vcxproj", "{E887C38B-1273-433A-9DAC-A153DA5CF145}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -31,6 +31,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E06_Render", "E06_Render_to_Texture\E06_Render.vcxproj", "{8B5E6515-984D-494A-AA07-3DE4DC590307}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E08_Blur", "E08_Blur\E08_Blur.vcxproj", "{3A2084CF-54B7-4A08-A028-FF948B85BD68}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exper_Dissolve_Shader", "Exper_Dissolve_Shader\Exper_Dissolve_Shader.vcxproj", "{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,6 +124,14 @@ Global
 		{3A2084CF-54B7-4A08-A028-FF948B85BD68}.Release|Win32.Build.0 = Release|Win32
 		{3A2084CF-54B7-4A08-A028-FF948B85BD68}.Release|x64.ActiveCfg = Release|x64
 		{3A2084CF-54B7-4A08-A028-FF948B85BD68}.Release|x64.Build.0 = Release|x64
+		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Debug|Win32.Build.0 = Debug|Win32
+		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Debug|x64.ActiveCfg = Debug|x64
+		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Debug|x64.Build.0 = Debug|x64
+		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Release|Win32.ActiveCfg = Release|Win32
+		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Release|Win32.Build.0 = Release|Win32
+		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Release|x64.ActiveCfg = Release|x64
+		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
