@@ -322,3 +322,15 @@ void BaseShader::Render(ID3D11DeviceContext* deviceContext, int indexCount)
 	// Render the triangle.
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 }
+D3D11_BUFFER_DESC BaseShader::ReturnBasicBufferDesc(UINT ByteWidth)
+{
+	D3D11_BUFFER_DESC BufferDesc;
+	BufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	BufferDesc.ByteWidth = ByteWidth;
+	BufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	BufferDesc.MiscFlags = 0;
+	BufferDesc.StructureByteStride = 0;
+
+	return BufferDesc;
+}

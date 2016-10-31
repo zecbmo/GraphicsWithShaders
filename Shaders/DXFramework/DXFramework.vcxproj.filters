@@ -126,6 +126,9 @@
     <ClInclude Include="stb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="MyTesselationMesh.h">
+      <Filter>Header Files\Geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseMesh.cpp">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="imgui_impl_dx11.cpp">
       <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTessellationMesh.cpp">
+      <Filter>Source Files\Geometry</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

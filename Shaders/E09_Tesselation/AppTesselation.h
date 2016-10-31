@@ -1,0 +1,80 @@
+#pragma once
+// Application.h
+#ifndef _App_H
+#define _App_H
+
+// Includes
+#include "../DXFramework/imgui.h"
+#include "../DXFramework/imgui_impl_dx11.h"
+#include "../DXFramework/baseapplication.h"
+#include "D3D.h"
+#include "../DXFramework/SphereMesh.h"
+#include "../DXFramework/Light.h"
+#include "LightShader.h"
+#include "../DXFramework/OrthoMesh.h"
+#include "../DXFramework/RenderTexture.h"
+#include "TextureShader.h"
+#include "BlurShader.h"
+#include "../DXFramework/MyTesselationMesh.h"
+#include "TessellationShader.h"
+#include "DissolveShader.h"
+#include "../DXFramework/Texture.h"
+
+
+class App : public BaseApplication
+{
+public:
+
+	App();
+	~App();
+	void init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input*);
+
+	bool Frame();
+
+protected:
+	bool Render();
+	void RenderToTexture();
+	void RenderDissolve(float dissolveAmount,float fringeSize);
+	void RenderBlurToTexture(RenderTexture* target, RenderTexture* from, BlurShader* b_shader);
+	void SampleToDifferentTarget(RenderTexture* target, RenderTexture* from);
+	//void UpSample(RenderTexture* target, RenderTexture* from);
+	void RenderTesselation();
+
+
+	void RenderScene(RenderTexture* rend);
+
+private:
+	Light* light;
+	SphereMesh* m_Mesh;
+	LightShader* shader;
+
+	RenderTexture* m_render_texture;
+	OrthoMesh* m_ortho_mesh;
+	
+	TextureShader* text_shader;
+
+	BlurShader* box_blur_shader;
+	BlurShader* vert_blur_shader;
+	BlurShader* hor_blur_shader;
+
+	RenderTexture* m_box_render_texture;
+	RenderTexture* m_vert_render_texture;
+	RenderTexture* m_hor_render_texture;
+	RenderTexture* m_downsample_render_texture;
+	RenderTexture* m_upsample_render_texture;
+
+	float width, height;
+
+	//Tesselation
+	MyTessellationMesh* tes_mesh;
+	TessellationShader* tes_shader;
+	float tess_value;
+
+	//dissolve
+	DissolveShader* dis_shader;
+	Texture* dissolveMap;
+	float dis_amount;
+	float fringe;
+};
+
+#endif

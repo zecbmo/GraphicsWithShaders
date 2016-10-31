@@ -34,6 +34,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E08_Blur", "E08_Blur\E08_Bl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exper_Dissolve_Shader", "Exper_Dissolve_Shader\Exper_Dissolve_Shader.vcxproj", "{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E09_Tesselation", "E09_Tesselation\E09_Tesselation.vcxproj", "{247C7F3D-EA98-455C-B615-066AB0872DED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -132,6 +134,14 @@ Global
 		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Release|Win32.Build.0 = Release|Win32
 		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Release|x64.ActiveCfg = Release|x64
 		{9D083CC3-D8CF-4BAB-B3B9-16DCFCB0E359}.Release|x64.Build.0 = Release|x64
+		{247C7F3D-EA98-455C-B615-066AB0872DED}.Debug|Win32.ActiveCfg = Debug|Win32
+		{247C7F3D-EA98-455C-B615-066AB0872DED}.Debug|Win32.Build.0 = Debug|Win32
+		{247C7F3D-EA98-455C-B615-066AB0872DED}.Debug|x64.ActiveCfg = Debug|x64
+		{247C7F3D-EA98-455C-B615-066AB0872DED}.Debug|x64.Build.0 = Debug|x64
+		{247C7F3D-EA98-455C-B615-066AB0872DED}.Release|Win32.ActiveCfg = Release|Win32
+		{247C7F3D-EA98-455C-B615-066AB0872DED}.Release|Win32.Build.0 = Release|Win32
+		{247C7F3D-EA98-455C-B615-066AB0872DED}.Release|x64.ActiveCfg = Release|x64
+		{247C7F3D-EA98-455C-B615-066AB0872DED}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -48,6 +48,7 @@ protected:
 	void loadDomainShader(WCHAR* filename);
 	void loadGeometryShader(WCHAR* filename);
 	void loadPixelShader(WCHAR* filename);
+	D3D11_BUFFER_DESC ReturnBasicBufferDesc(UINT ByteWidth);
 
 protected:
 	ID3D11Device* m_device;

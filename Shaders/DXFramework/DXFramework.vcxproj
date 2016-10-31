@@ -94,6 +94,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="MyTesselationMesh.h" />
     <ClInclude Include="OrthoMesh.h" />
     <ClInclude Include="PlaneMesh.h" />
     <ClInclude Include="PointMesh.h" />
@@ -131,6 +132,7 @@
     <ClCompile Include="QuadMesh.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="SphereMesh.cpp" />
+    <ClCompile Include="MyTessellationMesh.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="TessellationMesh.cpp" />
     <ClCompile Include="Texture.cpp" />
