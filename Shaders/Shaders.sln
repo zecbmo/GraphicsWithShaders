@@ -36,6 +36,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exper_Dissolve_Shader", "Ex
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E09_Tesselation", "E09_Tesselation\E09_Tesselation.vcxproj", "{247C7F3D-EA98-455C-B615-066AB0872DED}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E10_Shadows", "E10_Shadows\E10_Shadows.vcxproj", "{14F73EC4-4FDA-4840-9FDD-A9E5258E8C54}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E11_GeomotryShader", "E11_GeomotryShader\E11_GeomotryShader.vcxproj", "{FCBAF66D-D40A-4B82-9D10-BF8183B39326}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -142,6 +146,22 @@ Global
 		{247C7F3D-EA98-455C-B615-066AB0872DED}.Release|Win32.Build.0 = Release|Win32
 		{247C7F3D-EA98-455C-B615-066AB0872DED}.Release|x64.ActiveCfg = Release|x64
 		{247C7F3D-EA98-455C-B615-066AB0872DED}.Release|x64.Build.0 = Release|x64
+		{14F73EC4-4FDA-4840-9FDD-A9E5258E8C54}.Debug|Win32.ActiveCfg = Debug|Win32
+		{14F73EC4-4FDA-4840-9FDD-A9E5258E8C54}.Debug|Win32.Build.0 = Debug|Win32
+		{14F73EC4-4FDA-4840-9FDD-A9E5258E8C54}.Debug|x64.ActiveCfg = Debug|x64
+		{14F73EC4-4FDA-4840-9FDD-A9E5258E8C54}.Debug|x64.Build.0 = Debug|x64
+		{14F73EC4-4FDA-4840-9FDD-A9E5258E8C54}.Release|Win32.ActiveCfg = Release|Win32
+		{14F73EC4-4FDA-4840-9FDD-A9E5258E8C54}.Release|Win32.Build.0 = Release|Win32
+		{14F73EC4-4FDA-4840-9FDD-A9E5258E8C54}.Release|x64.ActiveCfg = Release|x64
+		{14F73EC4-4FDA-4840-9FDD-A9E5258E8C54}.Release|x64.Build.0 = Release|x64
+		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Debug|Win32.Build.0 = Debug|Win32
+		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Debug|x64.ActiveCfg = Debug|x64
+		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Debug|x64.Build.0 = Debug|x64
+		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Release|Win32.ActiveCfg = Release|Win32
+		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Release|Win32.Build.0 = Release|Win32
+		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Release|x64.ActiveCfg = Release|x64
+		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

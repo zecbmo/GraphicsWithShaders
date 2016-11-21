@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <FxCompile Include="shaders\basic_dissolve_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\basic_dissolve_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="BoxBlur_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\depth_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="BoxBlur_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\depth_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\horizontalBlur_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\horizontalBlur_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\light_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\light_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\shadow_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\shadow_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\tessellation_ds.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\tessellation_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\tessellation_hs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\tessellation_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\texture_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\texture_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\verticalBlur_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GeometryShader_gs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GeometryShader_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GeometryShader_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BlurShader.cpp" />
+    <ClCompile Include="DepthShader.cpp" />
+    <ClCompile Include="DissolveShader.cpp" />
+    <ClCompile Include="HorizontalBlurShader.cpp" />
+    <ClCompile Include="LightShader.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ShadowShader.cpp" />
+    <ClCompile Include="TessellationShader.cpp" />
+    <ClCompile Include="TextureShader.cpp" />
+    <ClCompile Include="VerticalBlurShader.cpp" />
+    <ClCompile Include="AppGeometry.cpp" />
+    <ClCompile Include="GeometryShader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BlurShader.h" />
+    <ClInclude Include="DepthShader.h" />
+    <ClInclude Include="DissolveShader.h" />
+    <ClInclude Include="HorizontalBlurShader.h" />
+    <ClInclude Include="LightShader.h" />
+    <ClInclude Include="ShadowShader.h" />
+    <ClInclude Include="TessellationShader.h" />
+    <ClInclude Include="TextureShader.h" />
+    <ClInclude Include="VerticalBlurShader.h" />
+    <ClInclude Include="AppGeometry.h" />
+    <ClInclude Include="GeometryShader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{e9b5a3a0-96b1-4901-95ea-1c126423797c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
