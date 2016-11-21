@@ -50,14 +50,16 @@ void main(
 
 
 
-	input[0].position.w = 1.0f;
+	input[0].position.w = 1.0f;
+
 	AddTriangleArroundPoint(triStream, input, -1, 1, 0);
 	AddTriangleArroundPoint(triStream, input, -1, -1, 0);
 	AddTriangleArroundPoint(triStream, input, 1, 1, 0);
 	AddTriangleArroundPoint(triStream, input, 1, -1, 0);
 
 
-	triStream.RestartStrip();
+	triStream.RestartStrip();
+
 }
 
 

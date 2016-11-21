@@ -90,7 +90,7 @@ bool App1::Render()
 	XMMATRIX rotation = XMMatrixIdentity();
 
 	transform = XMMatrixTranslation(4.0, 0, 0);
-	rotation = XMMatrixRotationRollPitchYaw(0.0, rot_num, 0.0);
+	rotation = XMMatrixRotationRollPitchYaw(0.0, rot_num, rot_num);
 
 	
 	worldMatrix = XMMatrixRotationRollPitchYaw(0.0, 0.0, rot_num);

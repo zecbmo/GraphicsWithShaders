@@ -8,6 +8,7 @@
 #include <dxgi.h>
 #include <DirectXMath.h>
 #include <fstream>
+#include "ShaderArgs.h"
 
 using namespace std;
 using namespace DirectX;
@@ -38,6 +39,10 @@ public:
 	~BaseShader();
 
 	virtual void Render(ID3D11DeviceContext* deviceContext, int vertexCount);
+
+	//Will be overloaded for each shader
+	virtual void SetShaderParameters(ShaderArgs& m_ShaderArgs) {};
+	
 
 protected:
 	virtual void InitShader(WCHAR*, WCHAR*) = 0;
