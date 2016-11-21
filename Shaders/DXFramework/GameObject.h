@@ -40,6 +40,12 @@ public:
 
 	inline void SetPosition(XMFLOAT3 Position) { m_Position = Position; };
 	inline void SetRotation(XMFLOAT3 Rotation) { m_Rotation = Rotation; };
+	inline void SetScale(XMFLOAT3 Scale) { m_Scale = Scale; };
+	inline XMFLOAT3* GetPositionPointer() { return &m_Position; };
+	inline XMFLOAT3* GetRotationPointer() { return &m_Rotation; };
+	inline XMFLOAT3* GetScalePointer() { return &m_Scale; };
+
+	inline void ChangeTexture(WCHAR* textureFilename) { m_TextureFilename = textureFilename; };
 
 private:
 	//Safety Check for the Shader. Checks that all needed args have been set before rendering.

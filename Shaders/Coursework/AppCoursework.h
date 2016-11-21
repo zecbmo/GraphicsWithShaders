@@ -18,6 +18,8 @@
 #include "DepthShader.h"
 #include "GeometryShader.h"
 
+enum TextureType {kDefault, kCheckerBoard, kBunny, kDissolveMap, kGradientMap, kPatrickStarT, kSpongeBobT, kGaryT};
+
 class App : public BaseApplication
 {
 public:
@@ -45,9 +47,13 @@ private:
 	DissolveShader* m_DissolveShader;
 
 	//ImGUI
+	void CreateGUIWindow();
+	void ModelTransFormGUI();
 	int m_ModelNumber;
 	int m_PrevModelNumber;
 	int m_ShaderNumber;
+	int m_TextureNumber;
+	int m_PrevTextureNumber;
 
 	//Reload the Shape
 	void ReloadShape();

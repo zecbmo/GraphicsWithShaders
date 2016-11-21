@@ -8,6 +8,8 @@
 
 using namespace DirectX;
 
+enum ModelType { kCube, kSphere, kQuad, kPatrickStar, kSpongeBob, kGary, kTessilated };
+
 class BaseMesh
 {
 protected:
