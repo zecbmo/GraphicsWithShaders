@@ -40,6 +40,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E10_Shadows", "E10_Shadows\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E11_GeomotryShader", "E11_GeomotryShader\E11_GeomotryShader.vcxproj", "{FCBAF66D-D40A-4B82-9D10-BF8183B39326}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Coursework", "Coursework\Coursework.vcxproj", "{105AD8DD-CB7C-4E43-AF6F-CDAEBCE477FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -162,6 +164,14 @@ Global
 		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Release|Win32.Build.0 = Release|Win32
 		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Release|x64.ActiveCfg = Release|x64
 		{FCBAF66D-D40A-4B82-9D10-BF8183B39326}.Release|x64.Build.0 = Release|x64
+		{105AD8DD-CB7C-4E43-AF6F-CDAEBCE477FA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{105AD8DD-CB7C-4E43-AF6F-CDAEBCE477FA}.Debug|Win32.Build.0 = Debug|Win32
+		{105AD8DD-CB7C-4E43-AF6F-CDAEBCE477FA}.Debug|x64.ActiveCfg = Debug|x64
+		{105AD8DD-CB7C-4E43-AF6F-CDAEBCE477FA}.Debug|x64.Build.0 = Debug|x64
+		{105AD8DD-CB7C-4E43-AF6F-CDAEBCE477FA}.Release|Win32.ActiveCfg = Release|Win32
+		{105AD8DD-CB7C-4E43-AF6F-CDAEBCE477FA}.Release|Win32.Build.0 = Release|Win32
+		{105AD8DD-CB7C-4E43-AF6F-CDAEBCE477FA}.Release|x64.ActiveCfg = Release|x64
+		{105AD8DD-CB7C-4E43-AF6F-CDAEBCE477FA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

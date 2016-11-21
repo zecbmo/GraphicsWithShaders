@@ -13,6 +13,7 @@
 using namespace std;
 using namespace DirectX;
 
+enum ShaderType {kTextureShader, kDissolveShader};
 
 class BaseShader
 {
@@ -42,7 +43,7 @@ public:
 
 	//Will be overloaded for each shader
 	virtual void SetShaderParameters(ShaderArgs& m_ShaderArgs) {};
-	
+	ShaderType GetShaderType() { return m_ShaderType; };
 
 protected:
 	virtual void InitShader(WCHAR*, WCHAR*) = 0;
@@ -67,6 +68,8 @@ protected:
 	ID3D11InputLayout* m_layout;
 	ID3D11Buffer* m_matrixBuffer;
 	ID3D11SamplerState* m_sampleState;
+
+	ShaderType m_ShaderType;
 };
 
 #endif

@@ -42,6 +42,10 @@ public:
 	inline void SetRotation(XMFLOAT3 Rotation) { m_Rotation = Rotation; };
 
 private:
+	//Safety Check for the Shader. Checks that all needed args have been set before rendering.
+	//Shows an Error Window if All appropriate attributes not set
+	void CheckShaderArgs(BaseShader* Shader);
+
 	//The base mesh is a pointer to hold the specific (child)mesh created 
 	BaseMesh* m_Mesh;
 	
