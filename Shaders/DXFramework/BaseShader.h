@@ -9,11 +9,12 @@
 #include <DirectXMath.h>
 #include <fstream>
 #include "ShaderArgs.h"
+#include "../DXFramework/ErrorSystem.h"
 
 using namespace std;
 using namespace DirectX;
 
-enum ShaderType {kTextureShader, kDissolveShader};
+enum ShaderType {kTextureShader, kDissolveShader, kLightShader};
 
 class BaseShader
 {
@@ -41,7 +42,7 @@ public:
 
 	virtual void Render(ID3D11DeviceContext* deviceContext, int vertexCount);
 
-	//Will be overloaded for each shader
+	//Will be overloaded for each shader - the main entry point for each shader
 	virtual void SetShaderParameters(ShaderArgs& m_ShaderArgs) {};
 	ShaderType GetShaderType() { return m_ShaderType; };
 

@@ -5,9 +5,6 @@
 App::App()
 {
 	m_GameObject = nullptr;
-	m_Light = nullptr;
-
-
 }
 
 void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in)
@@ -28,23 +25,21 @@ void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight
 	m_GameObject = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	m_GameObject->CreateCubeObject();
 	
+	//SetUpLights
+
+	SetupLights();
+
 	//Set up the Shaders
 	m_TextureShader = new TextureShader(m_Direct3D->GetDevice(),hwnd);
 	m_DissolveShader = new DissolveShader(m_Direct3D->GetDevice(), hwnd);
+	m_LightShader = new LightShader(m_Direct3D->GetDevice(), hwnd);
 
 	//Some initial Shader Args
 	m_GameObject->ModifyShaderArgs()->m_DissolveMap = new Texture(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/dissolveMap2.jpg");
 
-	//create the light
-	m_Light = new Light;
-	m_Light->SetDiffuseColour(1.0f, 1.0f, 1.0f, 1.0f);
-	m_Light->SetAmbientColour(0.2f, 0.2f, 0.2f, 1.0f);
-	m_Light->SetDirection(0.5f, -0.5f, 0.0f);
-	m_Light->SetPosition(10.f, 5.f, 10.0f);
 
-	m_Light->SetLookAt(0, 0, 0);
-	m_Light->GenerateProjectionMatrix(1,100);
-	m_Light->GenerateViewMatrix();
+
+
 }
 
 void App::InitShaders(HWND hwnd)
@@ -69,11 +64,7 @@ App::~App()
 		delete m_TextureShader;
 		m_TextureShader = 0;
 	}
-	if (m_Light)
-	{
-		delete m_Light;
-		m_Light = 0;
-	}
+
 
 }
 
@@ -99,6 +90,26 @@ bool App::Frame()
 	return true;
 }
 
+void App::SetupLights()
+{
+	for (int i = 0; i < MAX_LIGHTS; i++)
+	{
+		Light* Newlight = new Light;
+		Newlight->SetDiffuseColour(1.0f, 1.0f, 1.0f, 1.0f);
+		Newlight->SetAmbientColour(0.2f, 0.2f, 0.2f, 1.0f);
+		Newlight->SetDirection(0.5f, -0.5f, 0.0f);
+		Newlight->SetPosition(i+3.f, 5, 10.0f); //Give EachLight a dif position	
+		Newlight->SetSpecularColour(1.0f, 1.0f, 1.0f, 1.0f);
+		Newlight->SetSpecularPower(10);
+
+		m_GameObject->ModifyShaderArgs()->m_Lights.push_back(Newlight);
+		Newlight = nullptr;
+	}
+
+	m_GameObject->ModifyShaderArgs()->m_NumberOfLights = 4;
+
+}
+
 void App::CreateGUIWindow()
 {
 
@@ -108,7 +119,7 @@ void App::CreateGUIWindow()
 		{
 			ShaderArgs* Args = m_GameObject->ModifyShaderArgs();
 
-			if (ImGui::BeginMenu("File2"))
+			if (ImGui::BeginMenu("Menu"))
 			{
 				if (ImGui::BeginMenu("Model Options"))
 				{
@@ -127,7 +138,7 @@ void App::CreateGUIWindow()
 				if (ImGui::BeginMenu("Shader Options"))
 				{
 					//DropDown to Select Shader
-					ImGui::Combo("Shader Select", &m_ShaderNumber, "Texture Shader\0Dissolve Shader\0\0");
+					ImGui::Combo("Shader Select", &m_ShaderNumber, "Texture Shader\0Dissolve Shader\0Light Shader\0");
 
 					//Switch the GUI Based on what shader is selected (e.g. dissolve sliders will only show up when dissolve shader selected)
 					switch (m_ShaderNumber)
@@ -137,6 +148,8 @@ void App::CreateGUIWindow()
 					case kDissolveShader:
 						ImGui::SliderFloat("Dissolve amount", &Args->m_DissolveAmount,  0.0f, 1.0f);
 						ImGui::SliderFloat("Fringe size", &Args->m_DissolveFringeSize,  0.0f, 1.0f);
+						break;
+					case kLightShader:
 						break;
 					default:
 						break;
@@ -315,15 +328,20 @@ bool App::Render()
 	//// Generate the view matrix based on the camera's position.
 	m_Camera->Update();
 
-	if (m_ShaderNumber == 0)
+	switch (m_ShaderNumber)
 	{
+	case kTextureShader:
 		m_GameObject->Render(m_Direct3D, m_Camera, m_TextureShader);
-	}
-	else if (m_ShaderNumber == 1)
-	{
+		break;
+	case kDissolveShader:
 		m_GameObject->Render(m_Direct3D, m_Camera, m_DissolveShader);
+		break;
+	case kLightShader:
+		m_GameObject->Render(m_Direct3D, m_Camera, m_LightShader);
+		break;
+	default:
+		break;
 	}
-	
 
 
 

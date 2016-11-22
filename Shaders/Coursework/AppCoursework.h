@@ -20,6 +20,14 @@
 
 enum TextureType {kDefault, kCheckerBoard, kBunny, kDissolveMap, kGradientMap, kPatrickStarT, kSpongeBobT, kGaryT};
 
+/* The Application class
+*
+*	This is the main scene within the program
+*	It will update and render Objects/meshes/control within the program
+*
+*/
+
+
 class App : public BaseApplication
 {
 public:
@@ -37,7 +45,8 @@ protected:
 
 private:
 	//Light Settings
-	Light* m_Light;
+	void SetupLights();
+	
 
 	//GameObjects in Scene
 	GameObject* m_GameObject;
@@ -45,8 +54,9 @@ private:
 	//Shaders 
 	TextureShader* m_TextureShader;
 	DissolveShader* m_DissolveShader;
+	LightShader* m_LightShader;
 
-	//ImGUI
+	//ImGUI will give user control over shapes and shaders in runtime
 	void CreateGUIWindow();
 	void ModelTransFormGUI();
 	int m_ModelNumber;

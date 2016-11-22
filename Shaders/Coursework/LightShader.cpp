@@ -1,6 +1,6 @@
 // texture shader.cpp
 #include "lightshader.h"
-
+#include "../DXFramework/ShaderArgs.h"
 
 LightShader::LightShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {
@@ -48,6 +48,7 @@ void LightShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
 	D3D11_BUFFER_DESC lightBufferDesc;
+	D3D11_BUFFER_DESC cameraBufferDesc;
 
 	// Load (+ compile) shader files
 	loadVertexShader(vsFilename);
@@ -95,10 +96,45 @@ void LightShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	m_device->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
 
+
+	cameraBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	cameraBufferDesc.ByteWidth = sizeof(CameraBufferType);
+	cameraBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cameraBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cameraBufferDesc.MiscFlags = 0;
+	cameraBufferDesc.StructureByteStride = 0;
+
+	m_device->CreateBuffer(&cameraBufferDesc, NULL, &cameraBuffer);
+
+}
+void LightShader::SetShaderParameters(ShaderArgs& ShaderArgs)
+{
+	if (ShaderArgs.m_Lights.empty())
+	{
+		error::ErrorMessage("No Lights Set when passed to LightShader - Update the List of Lights");
+	}
+	if (ShaderArgs.m_Lights.size() != MAX_LIGHTS)
+	{
+		error::ErrorMessage("Not All Lights defined when passed to LightShader - Update the List of Lights");
+	}
+	if (ShaderArgs.m_NumberOfLights > MAX_LIGHTS)
+	{
+		error::ErrorMessage("Tried to select too many lights in LightShader");
+	}
+
+	SetShaderParameters(
+		ShaderArgs.m_DeviceContext,
+		ShaderArgs.m_WorldMatrix,
+		ShaderArgs.m_ViewMatrix,
+		ShaderArgs.m_ProjectionMatrix,
+		ShaderArgs.m_Texture,
+		ShaderArgs.m_Lights,
+		ShaderArgs
+		);
+
 }
 
-
-void LightShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light, float textOn = 1.0f)
+void LightShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, std::list<Light*>light, ShaderArgs& ShaderArgs)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -106,7 +142,7 @@ void LightShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const 
 	LightBufferType* lightPtr;
 	unsigned int bufferNumber;
 	XMMATRIX tworld, tview, tproj;
-
+	CameraBufferType* cameraPtr;
 
 	// Transpose the matrices to prepare them for the shader.
 	tworld = XMMatrixTranspose(worldMatrix);
@@ -133,19 +169,45 @@ void LightShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const 
 	// Now set the constant buffer in the vertex shader with the updated values.
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 
+
+
+
+	deviceContext->Map(cameraBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	cameraPtr = (CameraBufferType*)mappedResource.pData;
+	cameraPtr->position = ShaderArgs.m_CameraPos;
+	cameraPtr->padding = 0;
+	deviceContext->Unmap(cameraBuffer, 0);
+	bufferNumber = 1;
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &cameraBuffer);
+
+
 	//Additional
 	// Send light data to pixel shader
 	deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	lightPtr = (LightBufferType*)mappedResource.pData;
-	lightPtr->diffuse = light->GetDiffuseColour();
-	lightPtr->direction = light->GetDirection();
-	lightPtr->padding = textOn;
-	lightPtr->ambient = light->GetAmbientColour();
+
+	auto iter = light.begin();
+	for (int i = 0; i < MAX_LIGHTS; i++)
+	{
+		lightPtr->diffuseColor[i] = (*iter)->GetDiffuseColour();
+		lightPtr->ambientColor[i] = (*iter)->GetAmbientColour();
+		lightPtr->specularColor[i] = (*iter)->GetSpecularColour();
+		lightPtr->specularPower[i] = (*iter)->GetSpecularPower();
+
+		//get the position and set it as directional or positional
+		XMFLOAT3 pos = (*iter)->GetPosition();
+		lightPtr->position[i] = XMFLOAT4(pos.x, pos.y, pos.z, ShaderArgs.m_IsPointLight);
+		lightPtr->textureOn = ShaderArgs.m_TextureOn;
+		lightPtr->numberOfLights = ShaderArgs.m_NumberOfLights;
+		lightPtr->padding = XMFLOAT2();
+	}
+
+
 	deviceContext->Unmap(m_lightBuffer, 0);
 	bufferNumber = 0;
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
 
-	// Set shader texture resource in the pixel shader.
+		// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 }
 

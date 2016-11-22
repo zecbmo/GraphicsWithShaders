@@ -11,6 +11,7 @@
 
 GameObject::GameObject(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename)
 {
+	//Init the game object setting it's scale to 1.1.1.
 	m_Device = device;
 	m_DeviceContext = deviceContext;
 	m_TextureFilename = textureFilename;
@@ -24,10 +25,12 @@ GameObject::~GameObject()
 
 void GameObject::CreateSphereObject(int resolution)
 {
+	//Delete previous mesh if there is one already (For loading new meshes during runtime)
 	if (m_Mesh)
 	{
 		delete m_Mesh;
 	}
+	//Load the selected mesh
 	m_Mesh = new SphereMesh(m_Device, m_DeviceContext, m_TextureFilename, resolution);
 }
 
@@ -112,7 +115,7 @@ void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader)
 	XMMATRIX preScale = XMMatrixMultiply(rotation, transform);
 	worldMatrix = XMMatrixMultiply(preScale, scale);
 		
-	//Set the required shader args
+	//Set the required shader args - means we don't have to do it manually (this is the base for what every shader needs)
 	m_ShaderArgs.m_DeviceContext = Direct3D->GetDeviceContext();
 	m_ShaderArgs.m_Texture = m_Mesh->GetTexture();
 	m_ShaderArgs.m_WorldMatrix = worldMatrix;
@@ -123,8 +126,10 @@ void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader)
 	//// Send geometry data (from mesh)
 	m_Mesh->SendData(Direct3D->GetDeviceContext());
 
+	//Depending on the shader type we may want further options here
 	if (Shader->GetShaderType() == kDissolveShader)
 	{
+		//turn on alpha blending for the dissolve shader
 		Direct3D->TurnOnAlphaBlending();
 	}
 
@@ -134,15 +139,12 @@ void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader)
 	//// Render object (combination of mesh geometry and shader process
 	Shader->Render(Direct3D->GetDeviceContext(), m_Mesh->GetIndexCount());
 
+	//reset additional options based on shader type
 	if (Shader->GetShaderType() == kDissolveShader)
 	{
+		//turn off alpha blending for dissolve shader
 		Direct3D->TurnOffAlphaBlending();
 	}
 
 }
 
-void GameObject::CheckShaderArgs(BaseShader * Shader)
-{
-	
-
-}

@@ -5,20 +5,34 @@
 
 #include "../DXFramework/BaseShader.h"
 #include "../DXFramework/Light.h"
+#include <list>
 
 using namespace std;
 using namespace DirectX;
 
+#define MAX_LIGHTS 4 //Hard Coded in Shader. Must be changed ibn Light.ps if changed here 
 
 class LightShader : public BaseShader
 {
 private:
 	struct LightBufferType
 	{
-		XMFLOAT4 diffuse;
-		XMFLOAT3 direction;
+		XMFLOAT4 diffuseColor[MAX_LIGHTS];
+		XMFLOAT4 ambientColor[MAX_LIGHTS];
+		XMFLOAT4 specularColor[MAX_LIGHTS];
+		float specularPower[MAX_LIGHTS];
+		XMFLOAT4 position[MAX_LIGHTS]; //w == 0 directional light ----- w == 1 then positional light
+		float textureOn;
+		float numberOfLights; //only needs one but for padding issues will be defined as an array
+		XMFLOAT2 padding;
+		
+	};
+
+	struct CameraBufferType
+	{
+		XMFLOAT3 position;
 		float padding;
-		XMFLOAT4 ambient;
+
 	};
 
 public:
@@ -26,7 +40,8 @@ public:
 	LightShader(ID3D11Device* device, HWND hwnd);
 	~LightShader();
 
-	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &projection, ID3D11ShaderResourceView* texture, Light* light, float textOn);
+	void SetShaderParameters(ShaderArgs& ShaderArgs);
+	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &projection, ID3D11ShaderResourceView* texture, std::list<Light*>light, ShaderArgs& ShaderArgs);
 	void Render(ID3D11DeviceContext* deviceContext, int vertexCount);
 
 private:
@@ -36,6 +51,7 @@ private:
 	ID3D11Buffer* m_matrixBuffer;
 	ID3D11SamplerState* m_sampleState;
 	ID3D11Buffer* m_lightBuffer;
+	ID3D11Buffer* cameraBuffer;
 };
 
 #endif

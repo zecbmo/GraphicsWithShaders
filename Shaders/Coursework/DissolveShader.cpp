@@ -1,7 +1,7 @@
 // texture shader.cpp
 #include "DissolveShader.h"
 #include "../DXFramework/ShaderArgs.h"
-#include "../DXFramework/ErrorSystem.h"
+
 
 DissolveShader::DissolveShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {

@@ -12,6 +12,7 @@
 *	It will be basic in that it only inlcudes a mesh and a Transform.
 *	There are a choice of initalisation functions to add a mesh type to the GameObject. eg a cube/sphere
 *	Shader Arguments will be used to control the shader - based on shader being used they can be setup however needed
+*	Safety checks for shader arguments will be set in each individual shader and throw an error if the needed args haven't been set
 *	On Render Will render the shape to the given transforms with a selected shader passed as a pointer
 */
 
@@ -41,17 +42,16 @@ public:
 	inline void SetPosition(XMFLOAT3 Position) { m_Position = Position; };
 	inline void SetRotation(XMFLOAT3 Rotation) { m_Rotation = Rotation; };
 	inline void SetScale(XMFLOAT3 Scale) { m_Scale = Scale; };
+
+	//To be used to allow ImGUI controll over positions 
 	inline XMFLOAT3* GetPositionPointer() { return &m_Position; };
 	inline XMFLOAT3* GetRotationPointer() { return &m_Rotation; };
 	inline XMFLOAT3* GetScalePointer() { return &m_Scale; };
 
+	//Simple Command to allow texture changes in run time
 	inline void ChangeTexture(WCHAR* textureFilename) { m_TextureFilename = textureFilename; };
 
 private:
-	//Safety Check for the Shader. Checks that all needed args have been set before rendering.
-	//Shows an Error Window if All appropriate attributes not set
-	void CheckShaderArgs(BaseShader* Shader);
-
 	//The base mesh is a pointer to hold the specific (child)mesh created 
 	BaseMesh* m_Mesh;
 	

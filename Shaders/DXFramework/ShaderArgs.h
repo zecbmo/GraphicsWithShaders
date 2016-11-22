@@ -4,6 +4,7 @@
 #include <directxmath.h>
 #include "texture.h"
 #include "Light.h"
+#include <list>
 
 /** The Shader Argument Struct
 *
@@ -11,10 +12,10 @@
 *	It is passed to the SetShaderParameter Function within all Shader classes and they can 
 *	pick and use what information is needed.
 *	This will information will be stored in the game object class.
-*	The Member Data within the Public Section can be edited. (These may or may not be used by a shader)
-*	The Member Data within the Private Section will be set automatically within the game object.
 *
-*	Updated Changed So all values are public to give shaders access to the device contec
+*	Most of the shader properties here will be controllable by the user during runtime
+*
+*	Updated Changed So all values are public to give shaders access to the device context etc
 */
 
 struct ShaderArgs
@@ -24,13 +25,19 @@ public:
 	friend class GameObject;
 	ShaderArgs() : 
 		m_DeviceContext(nullptr), m_DissolveMap(nullptr),
-		m_Texture(nullptr), m_DepthMap(nullptr), m_Light(nullptr), 
+		m_Texture(nullptr), m_DepthMap(nullptr),  
 		m_WorldMatrix(XMMATRIX()), m_ViewMatrix(XMMATRIX()), 
-		m_ProjectionMatrix(XMMATRIX()) {}
+		m_ProjectionMatrix(XMMATRIX()), m_IsPointLight(true), m_TextureOn(true) {}
 
 
 	ID3D11ShaderResourceView* m_DepthMap;
-	Light* m_Light;
+
+	//Light Shader
+	std::list<Light*> m_Lights;
+	bool m_IsPointLight; // true by default
+	bool m_TextureOn; //texture controls
+	int m_NumberOfLights;
+	XMFLOAT3 m_CameraPos;
 
 	//Dissolve Shader
 	Texture* m_DissolveMap;
