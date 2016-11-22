@@ -27,6 +27,8 @@ struct OutputType
     float3 normal : NORMAL;
 	float3 viewDirection : TEXCOORD1;
 	float3 position3D : TEXCOORD2;
+
+	
 };
 
 OutputType main(InputType input)
@@ -50,13 +52,16 @@ OutputType main(InputType input)
     // Normalize the normal vector.
     output.normal = normalize(output.normal);
 
+	//world pos of vertex
+	output.position3D = mul(input.position, worldMatrix);
+
+
 	//view direction
 	float4 worldPosition = mul(input.position, worldMatrix);
 	output.viewDirection = cameraPosition.xyz - worldPosition.xyz;
 	output.viewDirection = normalize(output.viewDirection);
 
-	//world pos of vertex
-	output.position3D = mul(input.position, worldMatrix);
+	
 
     return output;
 }

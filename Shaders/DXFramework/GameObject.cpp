@@ -113,7 +113,7 @@ void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader)
 	XMMATRIX scale = XMMatrixScaling(m_Scale.x, m_Scale.y, m_Scale.z);
 
 	XMMATRIX preScale = XMMatrixMultiply(rotation, transform);
-	worldMatrix = XMMatrixMultiply(preScale, scale);
+	worldMatrix = XMMatrixMultiply(scale, preScale);
 		
 	//Set the required shader args - means we don't have to do it manually (this is the base for what every shader needs)
 	m_ShaderArgs.m_DeviceContext = Direct3D->GetDeviceContext();

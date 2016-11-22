@@ -50,6 +50,8 @@ private:
 
 	//GameObjects in Scene
 	GameObject* m_GameObject;
+	GameObject* m_LightDebug[4];
+
 
 	//Shaders 
 	TextureShader* m_TextureShader;
@@ -59,11 +61,13 @@ private:
 	//ImGUI will give user control over shapes and shaders in runtime
 	void CreateGUIWindow();
 	void ModelTransFormGUI();
+	void ShowLightGUI();
 	int m_ModelNumber;
 	int m_PrevModelNumber;
 	int m_ShaderNumber;
 	int m_TextureNumber;
 	int m_PrevTextureNumber;
+	bool m_ShowDebugPositions;
 
 	//Reload the Shape
 	void ReloadShape();

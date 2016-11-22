@@ -19,13 +19,20 @@ void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight
 	m_PrevModelNumber = 0;
 	m_TextureNumber = 0;
 	m_PrevTextureNumber = 0;
-
+	m_ShowDebugPositions = true;
 		
 	// Create Game object
 	m_GameObject = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	m_GameObject->CreateCubeObject();
 	
 	//SetUpLights
+	for (int i = 0; i < MAX_LIGHTS; i++)
+	{
+		m_LightDebug[i] = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
+		m_LightDebug[i]->CreateSphereObject();
+		m_LightDebug[i]->SetScale(XMFLOAT3(0.2f, 0.2f, 0.2f));
+	}
+	
 
 	SetupLights();
 
@@ -79,6 +86,10 @@ bool App::Frame()
 		return false;
 	}
 
+	//Update some shader Args
+	m_GameObject->ModifyShaderArgs()->m_CameraPos = m_Camera->GetPosition();
+
+
 	// Render the graphics.
 	result = Render();
 	if (!result)
@@ -92,13 +103,22 @@ bool App::Frame()
 
 void App::SetupLights()
 {
+	XMFLOAT4 colours[4] = { XMFLOAT4(1,1,1,1),
+							XMFLOAT4(0,1,1,1),
+							XMFLOAT4(1,0,1,1),
+							XMFLOAT4(1,0,0,1) };
+
+	XMFLOAT3 pos[4] = {		XMFLOAT3(-5,0,0),
+							XMFLOAT3( 5,0,0),
+							XMFLOAT3( 0,0,5),
+							XMFLOAT3( 0,0,-5), };
+
 	for (int i = 0; i < MAX_LIGHTS; i++)
 	{
 		Light* Newlight = new Light;
-		Newlight->SetDiffuseColour(1.0f, 1.0f, 1.0f, 1.0f);
+		Newlight->SetDiffuseColour(colours[i]);
 		Newlight->SetAmbientColour(0.2f, 0.2f, 0.2f, 1.0f);
-		Newlight->SetDirection(0.5f, -0.5f, 0.0f);
-		Newlight->SetPosition(i+3.f, 5, 10.0f); //Give EachLight a dif position	
+		Newlight->SetLightPosition(pos[i]); //Give EachLight a dif position	
 		Newlight->SetSpecularColour(1.0f, 1.0f, 1.0f, 1.0f);
 		Newlight->SetSpecularPower(10);
 
@@ -106,7 +126,7 @@ void App::SetupLights()
 		Newlight = nullptr;
 	}
 
-	m_GameObject->ModifyShaderArgs()->m_NumberOfLights = 4;
+	m_GameObject->ModifyShaderArgs()->m_NumberOfLights = 1;
 
 }
 
@@ -150,6 +170,7 @@ void App::CreateGUIWindow()
 						ImGui::SliderFloat("Fringe size", &Args->m_DissolveFringeSize,  0.0f, 1.0f);
 						break;
 					case kLightShader:
+						ShowLightGUI();
 						break;
 					default:
 						break;
@@ -238,6 +259,207 @@ void App::ModelTransFormGUI()
 	ImGui::SliderFloat3("Scale", *scale, -10.0f, 10.0f);
 }
 
+void App::ShowLightGUI()
+{
+	//Get Pointer to Args for easy access
+	ShaderArgs* Args = m_GameObject->ModifyShaderArgs();
+
+	//Change number of lights with dropdown menu
+	static int lightNo = Args->m_NumberOfLights - 1;
+	ImGui::Combo("Number of Lights", &lightNo, "One\0Two\0Three\0Four\0");
+	Args->m_NumberOfLights = lightNo + 1;
+
+	//A button that when pressed will reset the lights positions
+	static bool a = false;
+	if (ImGui::Button("Reset Lights")) { printf("Clicked\n"); a ^= 1; }
+	if (a)
+	{
+		XMFLOAT3 pos[4] = { XMFLOAT3(-5,0,0),
+			XMFLOAT3(5,0,0),
+			XMFLOAT3(0,0,5),
+			XMFLOAT3(0,0,-5), };
+
+		//loop through lights and reset
+		int i = 0;
+		for (auto iter : Args->m_Lights)
+		{
+
+			iter->SetLightPosition(pos[i]);
+			i++;
+		}
+		a = false;
+	}
+
+	//A button that will show the debug positions 
+	ImGui::SameLine(); ImGui::Checkbox("Show Debug Positions", &m_ShowDebugPositions);
+
+
+
+	///////////////////The Intricies of ImGUI --- Have to set up all light params individually and cannot simply loop 
+
+	//Get References to Each Light
+	Light* lightID[MAX_LIGHTS];
+	int j = 0;
+	for (auto iter : Args->m_Lights)
+	{
+
+		lightID[j] = iter;
+		j++;
+	}
+	
+	XMFLOAT4 ambientCol = lightID[0]->GetAmbientColour();
+	float* col[3]{ &ambientCol.x,&ambientCol.y, &ambientCol.z };
+	ImGui::ColorEdit3("Ambient Colour", *col);
+	lightID[0]->SetAmbientColour(ambientCol.x, ambientCol.y, ambientCol.z, 1.0f);
+	
+	int ID = 0;
+
+	//If there is one light
+	if (Args->m_NumberOfLights >= 1)
+	{
+		if (ImGui::CollapsingHeader("Light One Properties"))
+		{		
+
+			//Get and Set Position with a slider in ImGUI
+			XMFLOAT3 pos = lightID[ID]->GetPosition();
+			float* light_pos[3] = { &pos.x, &pos.y, &pos.z };
+			ImGui::DragFloat3("L1 Position", *light_pos, 0.2f, -10.0f, 10.0f);
+			pos = XMFLOAT3(*light_pos[0], *light_pos[1], *light_pos[2]);
+			lightID[ID]->SetLightPosition(pos);
+
+			XMFLOAT4 diffuseCol = lightID[ID]->GetDiffuseColour();
+			float* difcol[3]{ &diffuseCol.x,&diffuseCol.y, &diffuseCol.z };
+			ImGui::ColorEdit3("L1 Diffuse Colour", *difcol);
+			lightID[ID]->SetDiffuseColour(diffuseCol.x, diffuseCol.y, diffuseCol.z, 1.0f);
+
+			XMFLOAT4 specularCol = lightID[ID]->GetSpecularColour();
+			float* speccol[3]{ &specularCol.x,&specularCol.y, &specularCol.z };
+			ImGui::ColorEdit3("L1 Specular Colour", *speccol);
+			lightID[ID]->SetSpecularColour(specularCol.x, specularCol.y, specularCol.z, 1.0f);
+
+			float pow = lightID[ID]->GetSpecularPower();
+			float* powp = &pow;
+			ImGui::DragFloat("L1 Specular Power", powp, 1.f, 1.0f, 1000.0f);
+			lightID[ID]->SetSpecularPower(pow);
+		}
+
+		
+
+	}
+	
+	ID = 1;
+
+	//If there is Two lights
+	if (Args->m_NumberOfLights >= 2)
+	{
+
+		if (ImGui::CollapsingHeader("Light Two Properties"))
+		{
+
+			//Add Seperation and Header
+			ImGui::Separator();
+			ImGui::Text("Light Two : L2");
+
+			//Get and Set Position with a slider in ImGUI
+			XMFLOAT3 pos = lightID[1]->GetPosition();
+			float* light_pos[3] = { &pos.x, &pos.y, &pos.z };
+			ImGui::DragFloat3("L2 Position", *light_pos, 0.2f, -10.0f, 10.0f);
+			pos = XMFLOAT3(*light_pos[0], *light_pos[1], *light_pos[2]);
+			lightID[1]->SetLightPosition(pos);
+
+			XMFLOAT4 diffuseCol = lightID[ID]->GetDiffuseColour();
+			float* difcol[3]{ &diffuseCol.x,&diffuseCol.y, &diffuseCol.z };
+			ImGui::ColorEdit3("L2 Diffuse Colour", *difcol);
+			lightID[ID]->SetDiffuseColour(diffuseCol.x, diffuseCol.y, diffuseCol.z, 1.0f);
+
+			XMFLOAT4 specularCol = lightID[ID]->GetSpecularColour();
+			float* speccol[3]{ &specularCol.x,&specularCol.y, &specularCol.z };
+			ImGui::ColorEdit3("L2 Specular Colour", *speccol);
+			lightID[ID]->SetSpecularColour(specularCol.x, specularCol.y, specularCol.z, 1.0f);
+
+			float pow = lightID[ID]->GetSpecularPower();
+			float* powp = &pow;
+			ImGui::DragFloat("L2 Specular Power", powp, 1.f, 1.0f, 1000.0f);
+			lightID[ID]->SetSpecularPower(pow);
+		}
+	}
+	
+	ID = 2;
+
+	//If there is Three lights
+	if (Args->m_NumberOfLights >= 3)
+	{
+		if (ImGui::CollapsingHeader("Light Three Properties"))
+		{
+			//Add Seperation and Header
+			ImGui::Separator();
+			ImGui::Text("Light Three : L3");
+
+			//Get and Set Position with a slider in ImGUI
+			XMFLOAT3 pos = lightID[2]->GetPosition();
+			float* light_pos[3] = { &pos.x, &pos.y, &pos.z };
+			ImGui::DragFloat3("L3 Position", *light_pos, 0.2f, -10.0f, 10.0f);
+			pos = XMFLOAT3(*light_pos[0], *light_pos[1], *light_pos[2]);
+			lightID[2]->SetLightPosition(pos);
+
+			XMFLOAT4 diffuseCol = lightID[ID]->GetDiffuseColour();
+			float* difcol[3]{ &diffuseCol.x,&diffuseCol.y, &diffuseCol.z };
+			ImGui::ColorEdit3("L3 Diffuse Colour", *difcol);
+			lightID[ID]->SetDiffuseColour(diffuseCol.x, diffuseCol.y, diffuseCol.z, 1.0f);
+
+			XMFLOAT4 specularCol = lightID[ID]->GetSpecularColour();
+			float* speccol[3]{ &specularCol.x,&specularCol.y, &specularCol.z };
+			ImGui::ColorEdit3("L3 Specular Colour", *speccol);
+			lightID[ID]->SetSpecularColour(specularCol.x, specularCol.y, specularCol.z, 1.0f);
+
+			float pow = lightID[ID]->GetSpecularPower();
+			float* powp = &pow;
+			ImGui::DragFloat("L3 Specular Power", powp, 1.f, 1.0f, 1000.0f);
+			lightID[ID]->SetSpecularPower(pow);
+		}
+	}
+	
+	ID = 3;
+
+	//If there is Four lights
+	if (Args->m_NumberOfLights >= 4)
+	{
+		if (ImGui::CollapsingHeader("Light Four Properties"))
+		{
+			//Add Seperation and Header
+			ImGui::Separator();
+			ImGui::Text("Light Four : L4");
+
+			//Get and Set Position with a slider in ImGUI
+			XMFLOAT3 pos = lightID[3]->GetPosition();
+			float* light_pos[3] = { &pos.x, &pos.y, &pos.z };
+			ImGui::DragFloat3("L4 Position", *light_pos, 0.2f, -10.0f, 10.0f);
+			pos = XMFLOAT3(*light_pos[0], *light_pos[1], *light_pos[2]);
+			lightID[3]->SetLightPosition(pos);
+
+			XMFLOAT4 diffuseCol = lightID[ID]->GetDiffuseColour();
+			float* difcol[3]{ &diffuseCol.x,&diffuseCol.y, &diffuseCol.z };
+			ImGui::ColorEdit3("L4 Diffuse Colour", *difcol);
+			lightID[ID]->SetDiffuseColour(diffuseCol.x, diffuseCol.y, diffuseCol.z, 1.0f);
+
+			XMFLOAT4 specularCol = lightID[ID]->GetSpecularColour();
+			float* speccol[3]{ &specularCol.x,&specularCol.y, &specularCol.z };
+			ImGui::ColorEdit3("L4 Specular Colour", *speccol);
+			lightID[ID]->SetSpecularColour(specularCol.x, specularCol.y, specularCol.z, 1.0f);
+
+			float pow = lightID[ID]->GetSpecularPower();
+			float* powp = &pow;
+			ImGui::DragFloat("L4 Specular Power", powp, 1.f, 1.0f, 1000.0f);
+			lightID[ID]->SetSpecularPower(pow);
+		}
+	}
+		
+	
+
+
+
+}
+
 void App::ReloadShape()
 {
 	if (m_PrevModelNumber != m_ModelNumber || m_PrevTextureNumber != m_TextureNumber)
@@ -323,7 +545,7 @@ bool App::Render()
 	
 
 	//// Clear the scene. (default blue colour)
-	m_Direct3D->BeginScene(1.0f, 0.0f, 1.0f, 1.0f);
+	m_Direct3D->BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
 
 	//// Generate the view matrix based on the camera's position.
 	m_Camera->Update();
@@ -337,8 +559,22 @@ bool App::Render()
 		m_GameObject->Render(m_Direct3D, m_Camera, m_DissolveShader);
 		break;
 	case kLightShader:
+	{
 		m_GameObject->Render(m_Direct3D, m_Camera, m_LightShader);
+
+		if (m_ShowDebugPositions)
+		{
+			auto iter = m_GameObject->ModifyShaderArgs()->m_Lights.begin();
+			for (int i = 0; i < m_GameObject->ModifyShaderArgs()->m_NumberOfLights; i++)
+			{
+				XMFLOAT3 lightPos = (*iter)->GetPosition();
+				m_LightDebug[i]->SetPosition(lightPos);
+				m_LightDebug[i]->Render(m_Direct3D, m_Camera, m_TextureShader);
+				iter++;
+			}
+		}
 		break;
+	}
 	default:
 		break;
 	}

@@ -20,12 +20,19 @@ private:
 		XMFLOAT4 diffuseColor[MAX_LIGHTS];
 		XMFLOAT4 ambientColor[MAX_LIGHTS];
 		XMFLOAT4 specularColor[MAX_LIGHTS];
-		float specularPower[MAX_LIGHTS];
-		XMFLOAT4 position[MAX_LIGHTS]; //w == 0 directional light ----- w == 1 then positional light
-		float textureOn;
-		float numberOfLights; //only needs one but for padding issues will be defined as an array
-		XMFLOAT2 padding;
 		
+				
+	};
+
+	struct LightArgsBufferType
+	{
+		XMFLOAT4 position[MAX_LIGHTS]; //w == 0 directional light ----- w == 1 then positional light
+		XMINT4 Args; // (x = number of lights, y = texture on)
+	};
+
+	struct SpecPowerBufferType //issues with buffers and seperating them fixes the issue
+	{
+		XMFLOAT4 specularPower;
 	};
 
 	struct CameraBufferType
@@ -51,6 +58,9 @@ private:
 	ID3D11Buffer* m_matrixBuffer;
 	ID3D11SamplerState* m_sampleState;
 	ID3D11Buffer* m_lightBuffer;
+	ID3D11Buffer* m_lightArgsBuffer;
+	ID3D11Buffer* m_SpecPowerBuffer;
+
 	ID3D11Buffer* cameraBuffer;
 };
 

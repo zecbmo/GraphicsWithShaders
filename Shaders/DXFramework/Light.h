@@ -25,9 +25,11 @@ public:
 	// Setters
 	void SetAmbientColour(float, float, float, float);
 	void SetDiffuseColour(float, float, float, float);
+	void SetDiffuseColour(XMFLOAT4 colour);
 	void SetDirection(float, float, float);
 	void SetSpecularColour(float, float, float, float);
 	void SetSpecularPower(float);
+	void SetLightPosition(XMFLOAT3 pos);
 	void SetPosition(float, float, float);
 	void SetLookAt(float, float, float);
 

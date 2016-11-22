@@ -37,6 +37,11 @@ void Light::SetDiffuseColour(float red, float green, float blue, float alpha)
 	m_diffuseColour = XMFLOAT4(red, green, blue, alpha);
 }
 
+void Light::SetDiffuseColour(XMFLOAT4 colour)
+{
+	m_diffuseColour = colour;
+}
+
 
 void Light::SetDirection(float x, float y, float z)
 {
@@ -57,6 +62,10 @@ void Light::SetSpecularPower(float power)
 void Light::SetPosition(float x, float y, float z)
 {
 	m_position = XMVectorSet(x, y, z, 1.0f);
+}
+void Light::SetLightPosition(XMFLOAT3 pos)
+{
+	m_position = XMVectorSet(pos.x, pos.y, pos.z, 1.0f);
 }
 
 XMFLOAT4 Light::GetAmbientColour()
