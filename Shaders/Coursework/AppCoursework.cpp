@@ -40,9 +40,15 @@ void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight
 	m_TextureShader = new TextureShader(m_Direct3D->GetDevice(),hwnd);
 	m_DissolveShader = new DissolveShader(m_Direct3D->GetDevice(), hwnd);
 	m_LightShader = new LightShader(m_Direct3D->GetDevice(), hwnd);
+	m_ManipulationShader = new ManipulationShader(m_Direct3D->GetDevice(), hwnd);
+	m_DisplacementMapShader = new ManipulationShader(m_Direct3D->GetDevice(), hwnd);
 
 	//Some initial Shader Args
 	m_GameObject->ModifyShaderArgs()->m_DissolveMap = new Texture(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/dissolveMap2.jpg");
+	m_GameObject->ModifyShaderArgs()->m_DisplacementMap = new Texture(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/world.jpg");
+	m_GameObject->ModifyShaderArgs()->m_Height = 1;
+	m_GameObject->ModifyShaderArgs()->m_Time = 0;
+	m_GameObject->ModifyShaderArgs()->m_Speed = 1;
 
 
 
@@ -88,7 +94,9 @@ bool App::Frame()
 
 	//Update some shader Args
 	m_GameObject->ModifyShaderArgs()->m_CameraPos = m_Camera->GetPosition();
+	m_GameObject->ModifyShaderArgs()->m_Time += m_Timer->GetTime() * m_GameObject->ModifyShaderArgs()->m_Speed;
 
+	
 
 	// Render the graphics.
 	result = Render();
@@ -144,7 +152,7 @@ void App::CreateGUIWindow()
 				if (ImGui::BeginMenu("Model Options"))
 				{
 					//DropDown to Pick Which Mesh
-					ImGui::Combo("Mesh Select", &m_ModelNumber, "Cube\0Sphere\0Qaud\0Patrick Star\0SpongeBob\0Gary\0");
+					ImGui::Combo("Mesh Select", &m_ModelNumber, "Cube\0Sphere\0Qaud\0Plane\0Patrick Star\0SpongeBob\0Gary\0");
 
 					//DropDown to Pick Which Texture
 					ImGui::Combo("Texture Select", &m_TextureNumber,
@@ -158,7 +166,7 @@ void App::CreateGUIWindow()
 				if (ImGui::BeginMenu("Shader Options"))
 				{
 					//DropDown to Select Shader
-					ImGui::Combo("Shader Select", &m_ShaderNumber, "Texture Shader\0Dissolve Shader\0Light Shader\0");
+					ImGui::Combo("Shader Select", &m_ShaderNumber, "Texture Shader\0Dissolve Shader\0Light Shader\0Manipulation Shader\0Displacement Map Shader");
 
 					//Switch the GUI Based on what shader is selected (e.g. dissolve sliders will only show up when dissolve shader selected)
 					switch (m_ShaderNumber)
@@ -171,6 +179,13 @@ void App::CreateGUIWindow()
 						break;
 					case kLightShader:
 						ShowLightGUI();
+						break;
+					case kManipulationShader:
+						ImGui::SliderFloat("Height", &Args->m_Height, 0.0f, 2.0f);
+						ImGui::SliderFloat("Speed", &Args->m_Speed, 1.0f, 10.0f);
+						break;
+					case kDisplacementMapShader:
+						ImGui::SliderFloat("Height", &Args->m_Height, 0.0f, 10.0f);
 						break;
 					default:
 						break;
@@ -231,7 +246,7 @@ void App::ModelTransFormGUI()
 
 	XMFLOAT3& pos_pointer = *m_GameObject->GetPositionPointer();
 	float* pos[3] = { &pos_pointer.x, &pos_pointer.y, &pos_pointer.z };
-	ImGui::SliderFloat3("Position", *pos, -10.0f, 10.0f);
+	ImGui::DragFloat3("Position", *pos, 0.2f, -10.0f, 10.0f);
 
 	static bool b = false;
 	if (ImGui::Button("Rotation Reset")) { printf("Clicked\n"); b ^= 1; }
@@ -243,7 +258,7 @@ void App::ModelTransFormGUI()
 
 	XMFLOAT3& rot_pointer = *m_GameObject->GetRotationPointer();
 	float* rot[3] = { &rot_pointer.x, &rot_pointer.y, &rot_pointer.z };
-	ImGui::SliderFloat3("Rotation", *rot, -10.0f, 10.0f);
+	ImGui::DragFloat3("Rotation", *rot, 0.2f, -10.0f, 10.0f);
 
 	static bool c = false;
 	if (ImGui::Button("Scale Reset")) { printf("Clicked\n"); c ^= 1; }
@@ -256,7 +271,7 @@ void App::ModelTransFormGUI()
 
 	XMFLOAT3& scale_pointer = *m_GameObject->GetScalePointer();
 	float* scale[3] = { &scale_pointer.x, &scale_pointer.y, &scale_pointer.z };
-	ImGui::SliderFloat3("Scale", *scale, -10.0f, 10.0f);
+	ImGui::DragFloat3("Scale", *scale, 0.2f, -10.0f, 10.0f);
 }
 
 void App::ShowLightGUI()
@@ -525,6 +540,11 @@ void App::ReloadShape()
 			}
 			m_GameObject->LoadModel(L"../res/gary.obj");
 			break;
+		case kPlane: 
+		{
+			m_GameObject->CreatePlaneObject(500);
+			m_GameObject->SetPosition(XMFLOAT3(-250.f, -30.f, -20.f));
+		}
 		default:
 			break;
 		}
@@ -550,6 +570,10 @@ bool App::Render()
 	//// Generate the view matrix based on the camera's position.
 	m_Camera->Update();
 
+	////Reset Shader Flags
+	m_GameObject->ModifyShaderArgs()->m_IsDisplacementMap = 0; //flag in shader to load displacement map
+	
+
 	switch (m_ShaderNumber)
 	{
 	case kTextureShader:
@@ -573,6 +597,19 @@ bool App::Render()
 				iter++;
 			}
 		}
+		break;
+	}
+	case kManipulationShader:
+	{
+		m_GameObject->Render(m_Direct3D, m_Camera, m_ManipulationShader);
+		break;
+	}
+	case kDisplacementMapShader:
+	{
+		m_GameObject->ModifyShaderArgs()->m_IsDisplacementMap = 1; //flag in shader to load displacement map
+		//m_GameObject->CreatePlaneObject();
+		m_ModelNumber = kPlane;
+		m_GameObject->Render(m_Direct3D, m_Camera, m_DisplacementMapShader);
 		break;
 	}
 	default:

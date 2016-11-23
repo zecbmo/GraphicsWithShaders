@@ -7,6 +7,7 @@
 #include "../DXFramework/baseapplication.h"
 #include "D3D.h"
 #include "../DXFramework/CubeMesh.h"
+#include "../DXFramework/PlaneMesh.h"
 #include "../DXFramework/Light.h"
 #include "LightShader5.h"
 

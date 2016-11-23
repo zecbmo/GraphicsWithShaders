@@ -9,7 +9,7 @@
 using namespace DirectX;
 
 //Added model enums for definitions
-enum ModelType { kCube, kSphere, kQuad, kPatrickStar, kSpongeBob, kGary, kTessilated };
+enum ModelType { kCube, kSphere, kQuad, kPlane, kPatrickStar, kSpongeBob, kGary, kTessilated };
 
 class BaseMesh
 {

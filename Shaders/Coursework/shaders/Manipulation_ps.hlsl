@@ -29,6 +29,7 @@ struct InputType
 	float3 viewDirection : TEXCOORD1;
 	float3 position3D : TEXCOORD2;
 
+
 };
 
 
@@ -82,6 +83,15 @@ float4 main(InputType input) : SV_TARGET
 	float4 finalSpec[4];
 	float4 finalColor;
 	float4 textureColor;
+	float4 heightColor;
+	float4 textureColourFinal;
+	float4 Grass = float4(0, .75, 0, 1);
+	float4 Dirt = float4(.25, .5, 0, 1);
+	float4 Snow = float4(.75, .75, .75, 1);
+	float4 Water = float4(0, 0, .3, 1);
+
+
+
 
 	//set default colour value
 	finalColor = ambientColor[0];
@@ -100,7 +110,42 @@ float4 main(InputType input) : SV_TARGET
 
 
     // Sample the pixel color from the texture using the sampler at this texture coordinate location.
-    textureColor = shaderTexture.Sample(SampleType, input.tex);
+   
+
+	float waterLevel = -29.9;
+	float dirtLevel = -29.0;
+	float grassLevel = -28.0;
+
+	[branch] switch (Args.z)
+	{
+	case 0:  textureColor = shaderTexture.Sample(SampleType, input.tex);
+		textureColourFinal = textureColor;
+		break;
+	case 1:
+	
+		if (input.position3D.y <= waterLevel)
+		{
+			heightColor = Water;
+		}
+		if (input.position3D.y > waterLevel && input.position3D.y < dirtLevel)
+		{
+			heightColor = Dirt;
+		}
+		if (input.position3D.y > dirtLevel && input.position3D.y < grassLevel)
+		{
+			heightColor = Grass;
+		}
+		if (input.position3D.y >= grassLevel)
+		{
+			heightColor = Snow;
+		}
+
+		textureColourFinal = heightColor;
+
+		break;
+			
+	}
+
 
 	//[loop]
 	//for (int i = 0; i < Args.x; i++)
@@ -117,19 +162,19 @@ float4 main(InputType input) : SV_TARGET
 	{
 	case 1:
 
-		finalColor = saturate(color[0]) * textureColor;
+		finalColor = saturate(color[0]) * textureColourFinal;
 		finalColor = saturate(finalColor + finalSpec[0]);
 		break;
 	case 2:
-		finalColor = saturate(color[0] + color[1]) * textureColor;
+		finalColor = saturate(color[0] + color[1]) * textureColourFinal;
 		finalColor = saturate(finalColor +  finalSpec[0] + finalSpec[1]);
 		break;
 	case 3:
-		finalColor = saturate(color[0] + color[1] + color[2]) * textureColor;
+		finalColor = saturate(color[0] + color[1] + color[2]) * textureColourFinal;
 		finalColor = saturate(finalColor + finalSpec[0] + finalSpec[1] + finalSpec[2]);
 		break;
 	case 4:
-		finalColor = saturate(color[0] + color[1] + color[2] + color[3]) * textureColor;
+		finalColor = saturate(color[0] + color[1] + color[2] + color[3]) * textureColourFinal;
 		finalColor = saturate(finalColor + finalSpec[0] + finalSpec[1] + finalSpec[2] + finalSpec[3]);
 		break;
 	}

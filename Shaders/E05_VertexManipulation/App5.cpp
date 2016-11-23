@@ -15,7 +15,7 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in);
 
 	// Create Mesh object
-	m_Mesh = new PlaneMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
+	m_Mesh = new CubeMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	
 	//create the shader
 	shader = new LightShader(m_Direct3D->GetDevice(),hwnd);
@@ -119,7 +119,7 @@ bool App1::Render()
 
 	
 
-	transform = XMMatrixTranslation(-50, -10, 0);	
+	//transform = XMMatrixTranslation(-50, -10, 0);	
 	worldMatrix = XMMatrixMultiply(transform, worldMatrix);
 	
 

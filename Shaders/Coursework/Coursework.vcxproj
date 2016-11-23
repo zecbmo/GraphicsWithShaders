@@ -123,6 +123,7 @@
     <ClCompile Include="HorizontalBlurShader.cpp" />
     <ClCompile Include="LightShader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ManipulationShader.cpp" />
     <ClCompile Include="ShadowShader.cpp" />
     <ClCompile Include="TessellationShader.cpp" />
     <ClCompile Include="TextureShader.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="GeometryShader.h" />
     <ClInclude Include="HorizontalBlurShader.h" />
     <ClInclude Include="LightShader.h" />
+    <ClInclude Include="ManipulationShader.h" />
     <ClInclude Include="ShadowShader.h" />
     <ClInclude Include="TessellationShader.h" />
     <ClInclude Include="TextureShader.h" />
@@ -181,6 +183,14 @@
     </FxCompile>
     <FxCompile Include="shaders\light_vs.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\Manipulation_ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\Manipulation_vs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\shadow_ps.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

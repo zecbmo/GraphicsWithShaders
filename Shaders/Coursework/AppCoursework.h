@@ -17,6 +17,7 @@
 #include "ShadowShader.h"
 #include "DepthShader.h"
 #include "GeometryShader.h"
+#include "ManipulationShader.h"
 
 enum TextureType {kDefault, kCheckerBoard, kBunny, kDissolveMap, kGradientMap, kPatrickStarT, kSpongeBobT, kGaryT};
 
@@ -47,7 +48,6 @@ private:
 	//Light Settings
 	void SetupLights();
 	
-
 	//GameObjects in Scene
 	GameObject* m_GameObject;
 	GameObject* m_LightDebug[4];
@@ -57,6 +57,9 @@ private:
 	TextureShader* m_TextureShader;
 	DissolveShader* m_DissolveShader;
 	LightShader* m_LightShader;
+	ManipulationShader* m_ManipulationShader;
+	ManipulationShader* m_DisplacementMapShader;
+
 
 	//ImGUI will give user control over shapes and shaders in runtime
 	void CreateGUIWindow();

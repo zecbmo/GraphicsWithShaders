@@ -27,7 +27,7 @@ public:
 		m_DeviceContext(nullptr), m_DissolveMap(nullptr),
 		m_Texture(nullptr), m_DepthMap(nullptr),  
 		m_WorldMatrix(XMMATRIX()), m_ViewMatrix(XMMATRIX()), 
-		m_ProjectionMatrix(XMMATRIX()), m_IsPointLight(true), m_TextureOn(true) {}
+		m_ProjectionMatrix(XMMATRIX()), m_IsPointLight(true), m_TextureOn(true), m_IsDisplacementMap(0){}
 
 
 	ID3D11ShaderResourceView* m_DepthMap;
@@ -43,6 +43,13 @@ public:
 	Texture* m_DissolveMap;
 	float m_DissolveAmount;
 	float m_DissolveFringeSize;
+
+	//Vertex Manipulation Shader
+	float m_Speed;
+	float m_Height;
+	float m_Time;
+	float m_IsDisplacementMap;
+	Texture* m_DisplacementMap;
 	
 
 	//Defaults for all Shaders

@@ -70,6 +70,12 @@
     <FxCompile Include="shaders\verticalBlur_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\Manipulation_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Manipulation_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -79,16 +85,10 @@
     <ClCompile Include="DepthShader.cpp">
       <Filter>ShaderClasses</Filter>
     </ClCompile>
-    <ClCompile Include="DissolveShader.cpp">
-      <Filter>ShaderClasses</Filter>
-    </ClCompile>
     <ClCompile Include="GeometryShader.cpp">
       <Filter>ShaderClasses</Filter>
     </ClCompile>
     <ClCompile Include="HorizontalBlurShader.cpp">
-      <Filter>ShaderClasses</Filter>
-    </ClCompile>
-    <ClCompile Include="LightShader.cpp">
       <Filter>ShaderClasses</Filter>
     </ClCompile>
     <ClCompile Include="ShadowShader.cpp">
@@ -97,13 +97,22 @@
     <ClCompile Include="TessellationShader.cpp">
       <Filter>ShaderClasses</Filter>
     </ClCompile>
-    <ClCompile Include="TextureShader.cpp">
-      <Filter>ShaderClasses</Filter>
-    </ClCompile>
     <ClCompile Include="VerticalBlurShader.cpp">
       <Filter>ShaderClasses</Filter>
     </ClCompile>
     <ClCompile Include="AppCoursework.cpp" />
+    <ClCompile Include="DissolveShader.cpp">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureShader.cpp">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClCompile>
+    <ClCompile Include="LightShader.cpp">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClCompile>
+    <ClCompile Include="ManipulationShader.cpp">
+      <Filter>ShaderClasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlurShader.h">
@@ -112,16 +121,10 @@
     <ClInclude Include="DepthShader.h">
       <Filter>ShaderClasses</Filter>
     </ClInclude>
-    <ClInclude Include="DissolveShader.h">
-      <Filter>ShaderClasses</Filter>
-    </ClInclude>
     <ClInclude Include="GeometryShader.h">
       <Filter>ShaderClasses</Filter>
     </ClInclude>
     <ClInclude Include="HorizontalBlurShader.h">
-      <Filter>ShaderClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="LightShader.h">
       <Filter>ShaderClasses</Filter>
     </ClInclude>
     <ClInclude Include="ShadowShader.h">
@@ -130,13 +133,22 @@
     <ClInclude Include="TessellationShader.h">
       <Filter>ShaderClasses</Filter>
     </ClInclude>
-    <ClInclude Include="TextureShader.h">
-      <Filter>ShaderClasses</Filter>
-    </ClInclude>
     <ClInclude Include="VerticalBlurShader.h">
       <Filter>ShaderClasses</Filter>
     </ClInclude>
     <ClInclude Include="AppCoursework.h" />
+    <ClInclude Include="DissolveShader.h">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureShader.h">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="LightShader.h">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="ManipulationShader.h">
+      <Filter>ShaderClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -144,6 +156,9 @@
     </Filter>
     <Filter Include="ShaderClasses">
       <UniqueIdentifier>{c3d076ed-37e3-4128-8a21-c47a465b2435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShaderClasses\Completed">
+      <UniqueIdentifier>{e3fe78bf-e170-412b-86f6-452116547436}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
