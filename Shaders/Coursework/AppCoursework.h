@@ -18,8 +18,10 @@
 #include "DepthShader.h"
 #include "GeometryShader.h"
 #include "ManipulationShader.h"
+#include "PostProcessor.h"
 
 enum TextureType {kDefault, kCheckerBoard, kBunny, kDissolveMap, kGradientMap, kPatrickStarT, kSpongeBobT, kGaryT};
+enum PostProcessType {kNone, kBoxBlur, kGausianBlur };
 
 /* The Application class
 *
@@ -51,7 +53,19 @@ private:
 	//GameObjects in Scene
 	GameObject* m_GameObject;
 	GameObject* m_LightDebug[4];
+	GameObject* m_ShadowPlane;
 
+	//Post Processing Scene
+	void SetUpPostProcessingScene();
+	void CreatePathHelper(XMFLOAT3 pos);
+	void CreateWallHelper(XMFLOAT3 pos);
+	void CreateBuildingHelper(XMFLOAT3 pos, XMFLOAT3 scale, WCHAR* texture);
+	void RenderPostProcessingScene();
+	std::list<GameObject*> m_SceneObjects;
+
+	//Post processing
+	PostProcessor* m_PostProcessor;
+	RenderTexture* m_PostProcessTexture;
 
 	//Shaders 
 	TextureShader* m_TextureShader;
@@ -59,21 +73,42 @@ private:
 	LightShader* m_LightShader;
 	ManipulationShader* m_ManipulationShader;
 	ManipulationShader* m_DisplacementMapShader;
+	BlurShader* m_BoxBlurShader;
+	BlurShader* m_HorizontalBlurShader;
+	BlurShader* m_VerticalBlurShader;
+	ShadowShader* m_ShadowShader;
+	DepthShader* m_DepthShader;
 
+	//Shader Arguments
+	ShaderArgs m_ShaderArgs;
+
+	//Shadow Game Object List for depth buffer
+	std::list<GameObject*> m_ShadowObjects;
+	void RenderShadowScene();
 
 	//ImGUI will give user control over shapes and shaders in runtime
 	void CreateGUIWindow();
 	void ModelTransFormGUI();
 	void ShowLightGUI();
+	void ShowBasePostShadersGUI();
 	int m_ModelNumber;
 	int m_PrevModelNumber;
 	int m_ShaderNumber;
 	int m_TextureNumber;
 	int m_PrevTextureNumber;
 	bool m_ShowDebugPositions;
+	int m_PostProcessShader;
+	int m_PostProcessBaseShader;
+	bool m_ShowDepthTexture;
+	bool m_ShowDepthFromLight;
+	int m_ShadowQuality;
+
 
 	//Reload the Shape
 	void ReloadShape();
+
+	//Clear Colour
+	XMFLOAT3 m_ClearColour;
 };
 
 #endif

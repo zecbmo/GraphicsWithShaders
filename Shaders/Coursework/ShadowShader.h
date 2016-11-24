@@ -39,6 +39,7 @@ public:
 	ShadowShader(ID3D11Device* device, HWND hwnd);
 	~ShadowShader();
 
+	void SetShaderParameters(ShaderArgs &args);
 	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &projection, ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView*depthMap, Light* light, float newBias);
 	void Render(ID3D11DeviceContext* deviceContext, int vertexCount);
 

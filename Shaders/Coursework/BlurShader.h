@@ -27,6 +27,7 @@ public:
 	BlurShader(ID3D11Device* device, HWND hwnd, WCHAR* vs_filename, WCHAR* ps_filename);
 	~BlurShader();
 
+	void SetShaderParameters(ShaderArgs& m_ShaderArgs);
 	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &projection, ID3D11ShaderResourceView* texture, float width, float height);
 	void Render(ID3D11DeviceContext* deviceContext, int vertexCount);
 

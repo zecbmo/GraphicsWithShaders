@@ -441,7 +441,7 @@ void App::RenderShadowsFromDepthTexture(RenderTexture * rend)
 
 	time += m_Timer->GetTime();
 
-	bias = abs( sinf(time*50) / 2000000.f);
+	bias = 0.0001f;
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_Mesh->SendData(m_Direct3D->GetDeviceContext());

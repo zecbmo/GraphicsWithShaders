@@ -58,4 +58,12 @@ public:
 	XMMATRIX m_ViewMatrix;
 	XMMATRIX m_ProjectionMatrix;
 	ID3D11ShaderResourceView* m_Texture;
+
+	//Blur Shaders
+	int m_ScreenWidth;
+	int m_ScreenHeight;
+
+	//Shadows
+	float m_ShadowBias;
+	Light* m_ShadowLight;
 };

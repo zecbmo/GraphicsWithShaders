@@ -96,6 +96,21 @@ void BlurShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 }
 
 
+void BlurShader::SetShaderParameters(ShaderArgs & m_ShaderArgs)
+{
+
+	//Helper function that is overloaded from the base class
+	SetShaderParameters(
+		m_ShaderArgs.m_DeviceContext,
+		m_ShaderArgs.m_WorldMatrix,
+		m_ShaderArgs.m_ViewMatrix,
+		m_ShaderArgs.m_ProjectionMatrix,
+		m_ShaderArgs.m_Texture,
+		m_ShaderArgs.m_ScreenWidth,
+		m_ShaderArgs.m_ScreenHeight);
+
+}
+
 void BlurShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, float width, float height)
 {
 	HRESULT result;

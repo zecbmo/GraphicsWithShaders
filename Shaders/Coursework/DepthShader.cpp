@@ -51,6 +51,16 @@ void DepthShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 }
 
 
+void DepthShader::SetShaderParameters(ShaderArgs & args)
+{
+	SetShaderParameters(
+		args.m_DeviceContext,
+		args.m_WorldMatrix,
+		args.m_ViewMatrix,
+		args.m_ProjectionMatrix
+		);
+}
+
 void DepthShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix)
 {
 	HRESULT result;

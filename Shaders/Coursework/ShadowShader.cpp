@@ -124,6 +124,22 @@ void ShadowShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 }
 
 
+void ShadowShader::SetShaderParameters(ShaderArgs & args)
+{
+	auto light = args.m_ShadowLight;
+
+	SetShaderParameters(
+		args.m_DeviceContext,
+		args.m_WorldMatrix,
+		args.m_ViewMatrix,
+		args.m_ProjectionMatrix,
+		args.m_Texture,
+		args.m_DepthMap,
+		light,
+		args.m_ShadowBias
+		);
+}
+
 void ShadowShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView*depthMap, Light* light, float newBias)
 {
 	HRESULT result;

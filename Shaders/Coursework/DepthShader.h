@@ -17,6 +17,7 @@ public:
 	DepthShader(ID3D11Device* device, HWND hwnd);
 	~DepthShader();
 
+	void SetShaderParameters(ShaderArgs &args);
 	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &projection);
 
 private:

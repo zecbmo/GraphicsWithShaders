@@ -97,7 +97,7 @@ void GameObject::CreatePointMesh()
 	m_Mesh = new PointMesh(m_Device, m_DeviceContext, m_TextureFilename);
 }
 
-void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader)
+void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader, ShaderArgs& shaderArgs)
 {
 	
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
@@ -116,11 +116,11 @@ void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader)
 	worldMatrix = XMMatrixMultiply(scale, preScale);
 		
 	//Set the required shader args - means we don't have to do it manually (this is the base for what every shader needs)
-	m_ShaderArgs.m_DeviceContext = Direct3D->GetDeviceContext();
-	m_ShaderArgs.m_Texture = m_Mesh->GetTexture();
-	m_ShaderArgs.m_WorldMatrix = worldMatrix;
-	m_ShaderArgs.m_ProjectionMatrix = projectionMatrix;
-	m_ShaderArgs.m_ViewMatrix = viewMatrix;
+	shaderArgs.m_DeviceContext = Direct3D->GetDeviceContext();
+	shaderArgs.m_Texture = m_Mesh->GetTexture();
+	shaderArgs.m_WorldMatrix = worldMatrix;
+	shaderArgs.m_ProjectionMatrix = projectionMatrix;
+	shaderArgs.m_ViewMatrix = viewMatrix;
 	
 	
 	//// Send geometry data (from mesh)
@@ -134,7 +134,7 @@ void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader)
 	}
 
 	//// Set shader parameters (matrices and texture)
-	Shader->SetShaderParameters(m_ShaderArgs);
+	Shader->SetShaderParameters(shaderArgs);
 
 	//// Render object (combination of mesh geometry and shader process
 	Shader->Render(Direct3D->GetDeviceContext(), m_Mesh->GetIndexCount());
@@ -148,3 +148,67 @@ void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader)
 
 }
 
+void GameObject::RenderFromLightSource(D3D* Direct3D, Light* light, BaseShader* Shader, ShaderArgs& shaderArgs)
+{
+
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+
+	//// Get the world, view, projection, and ortho matrices from the camera and Direct3D objects.
+	Direct3D->GetWorldMatrix(worldMatrix);
+	//Camera->GetViewMatrix(viewMatrix);
+	Direct3D->GetProjectionMatrix(projectionMatrix);
+
+	//Do the Transforms on the Object
+	XMMATRIX transform = XMMatrixTranslation(m_Position.x, m_Position.y, m_Position.z);
+	XMMATRIX rotation = XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y, m_Rotation.z);
+	XMMATRIX scale = XMMatrixScaling(m_Scale.x, m_Scale.y, m_Scale.z);
+
+	XMMATRIX preScale = XMMatrixMultiply(rotation, transform);
+	worldMatrix = XMMatrixMultiply(scale, preScale);
+
+	XMMATRIX lightView = light->GetViewMatrix();
+	XMMATRIX lightProjection = light->GetProjectionMatrix();
+
+	//Set the required shader args - means we don't have to do it manually (this is the base for what every shader needs)
+	shaderArgs.m_DeviceContext = Direct3D->GetDeviceContext();
+	shaderArgs.m_Texture = m_Mesh->GetTexture();
+	shaderArgs.m_WorldMatrix = worldMatrix;
+	shaderArgs.m_ProjectionMatrix = lightProjection;
+	shaderArgs.m_ViewMatrix = lightView;
+
+
+	//// Send geometry data (from mesh)
+	m_Mesh->SendData(Direct3D->GetDeviceContext());
+
+	//Depending on the shader type we may want further options here
+	if (Shader->GetShaderType() == kDissolveShader)
+	{
+		//turn on alpha blending for the dissolve shader
+		Direct3D->TurnOnAlphaBlending();
+	}
+
+	//// Set shader parameters (matrices and texture)
+	Shader->SetShaderParameters(shaderArgs);
+
+	//// Render object (combination of mesh geometry and shader process
+	Shader->Render(Direct3D->GetDeviceContext(), m_Mesh->GetIndexCount());
+
+	//reset additional options based on shader type
+	if (Shader->GetShaderType() == kDissolveShader)
+	{
+		//turn off alpha blending for dissolve shader
+		Direct3D->TurnOffAlphaBlending();
+	}
+
+}
+
+void GameObject::RenderTargetFunction(D3D* Direct3D,  BaseShader* Shader, ShaderArgs& shaderArgs)
+{
+
+	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_Mesh->SendData(Direct3D->GetDeviceContext());
+
+	Shader->SetShaderParameters(shaderArgs);
+	// Render object (combination of mesh geometry and shader process
+	Shader->Render(Direct3D->GetDeviceContext(), m_Mesh->GetIndexCount());
+}

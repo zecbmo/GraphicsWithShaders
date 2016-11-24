@@ -124,6 +124,7 @@
     <ClCompile Include="LightShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ManipulationShader.cpp" />
+    <ClCompile Include="PostProcessor.cpp" />
     <ClCompile Include="ShadowShader.cpp" />
     <ClCompile Include="TessellationShader.cpp" />
     <ClCompile Include="TextureShader.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="HorizontalBlurShader.h" />
     <ClInclude Include="LightShader.h" />
     <ClInclude Include="ManipulationShader.h" />
+    <ClInclude Include="PostProcessor.h" />
     <ClInclude Include="ShadowShader.h" />
     <ClInclude Include="TessellationShader.h" />
     <ClInclude Include="TextureShader.h" />

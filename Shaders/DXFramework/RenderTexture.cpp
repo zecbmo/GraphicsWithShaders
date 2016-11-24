@@ -94,6 +94,8 @@ RenderTexture::RenderTexture(ID3D11Device* device, int textureWidth, int texture
 
 	// Create an orthographic projection matrix for 2D rendering.
 	m_orthoMatrix = XMMatrixOrthographicLH((float)textureWidth, (float)textureHeight, screenNear, screenFar);
+
+	m_HasBeenUsed = false;
 }
 
 RenderTexture::~RenderTexture()

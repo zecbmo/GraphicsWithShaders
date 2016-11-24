@@ -14,7 +14,7 @@ public:
 		return _mm_malloc(i, 16);
 	}
 
-	void operator delete(void* p)
+		void operator delete(void* p)
 	{
 		_mm_free(p);
 	}
@@ -32,6 +32,10 @@ public:
 	int GetTextureWidth();
 	int GetTextureHeight();
 
+	void Reset() { m_HasBeenUsed = false; };
+	void SetHasBeenUsed() { m_HasBeenUsed = true; };
+	bool GetHasBeenUsed() { return m_HasBeenUsed; };
+
 private:
 	int m_textureWidth, m_textureHeight;
 	ID3D11Texture2D* m_renderTargetTexture;
@@ -42,6 +46,7 @@ private:
 	D3D11_VIEWPORT m_viewport;
 	XMMATRIX m_projectionMatrix;
 	XMMATRIX m_orthoMatrix;
+	bool m_HasBeenUsed;
 };
 
 #endif

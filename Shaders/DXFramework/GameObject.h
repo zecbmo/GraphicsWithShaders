@@ -33,12 +33,14 @@ public:
 	void CreatePointMesh();
 
 	//In future it may be better to overload the Render Function for certain Shaders (e.g. Tesselation/Geomotry)
-	virtual void Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader);
+	virtual void Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader, ShaderArgs& shaderArgs);
+	virtual void RenderFromLightSource(D3D* Direct3D, Light * light, BaseShader* Shader, ShaderArgs& shaderArgs);
+	void GameObject::RenderTargetFunction(D3D* Direct3D, BaseShader* Shader, ShaderArgs& shaderArgs);
 	
 	//Able to edit the public member data when called e.g GameObject->ModifyShaderArgs()->Light = m_Light;
 	//The items that a shader needs must be set with this befoe the render function is called
-	inline ShaderArgs* ModifyShaderArgs() { return &m_ShaderArgs; };	
 
+	inline XMFLOAT3 GetPosition() { return m_Position; };
 	inline void SetPosition(XMFLOAT3 Position) { m_Position = Position; };
 	inline void SetRotation(XMFLOAT3 Rotation) { m_Rotation = Rotation; };
 	inline void SetScale(XMFLOAT3 Scale) { m_Scale = Scale; };
@@ -59,9 +61,6 @@ private:
 	XMFLOAT3 m_Position;
 	XMFLOAT3 m_Rotation;	
 	XMFLOAT3 m_Scale;
-
-	//Shader Arguments will be passed to the render function and specific shaders can take what they need from it
-	ShaderArgs m_ShaderArgs;
 	
 	//DirectX devie/context
 	ID3D11Device* m_Device;
