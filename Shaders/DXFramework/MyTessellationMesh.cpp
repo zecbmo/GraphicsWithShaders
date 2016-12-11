@@ -3,7 +3,7 @@
 
 MyTessellationMesh::MyTessellationMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename, int resolution)
 {
-	m_resolution = resolution;
+	m_resolution = 1;
 	// Initialize the vertex and index buffer that hold the geometry for the triangle.
 	InitBuffers(device);
 
@@ -536,32 +536,6 @@ void MyTessellationMesh::InitBuffers(ID3D11Device* device)
 		txv += txvinc;
 	}
 
-	// now loop over every vertex and bend into a sphere (normalise the vertices)
-	float x = 0;
-	float y = 0;
-	float z = 0;
-	float dx = 0;
-	float dy = 0;
-	float dz = 0;
-
-	for (int counter = 0; counter < v; counter++)
-	{
-		x = vertices[counter].position.x;
-		y = vertices[counter].position.y;
-		z = vertices[counter].position.z;
-
-		dx = x * sqrtf(1.0f - (y*y / 2.0f) - (z*z / 2.0f) + (y*y*z*z / 3.0f));
-		dy = y * sqrtf(1.0f - (z*z / 2.0f) - (x*x / 2.0f) + (z*z*x*x / 3.0f));
-		dz = z * sqrtf(1.0f - (x*x / 2.0f) - (y*y / 2.0f) + (x*x*y*y / 3.0f));
-
-		vertices[counter].position.x = dx;
-		vertices[counter].position.y = dy;
-		vertices[counter].position.z = dz;
-
-		vertices[counter].normal.x = dx;
-		vertices[counter].normal.y = dy;
-		vertices[counter].normal.z = dz;
-	}
 
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;

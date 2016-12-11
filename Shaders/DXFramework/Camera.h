@@ -13,7 +13,7 @@ public:
 		return _mm_malloc(i, 16);
 	}
 
-	void operator delete(void* p)
+		void operator delete(void* p)
 	{
 		_mm_free(p);
 	}
@@ -23,10 +23,14 @@ public:
 	~Camera();
 
 	void SetPosition(float, float, float);
+	void SetPosition(XMFLOAT3 Pos);
+
 	void SetRotation(float, float, float);
 
 	XMFLOAT3 GetPosition();
 	XMVECTOR GetRotation();
+	inline XMFLOAT3 GetUpVector() { return m_UpVec; };
+	inline XMFLOAT3 GetRightVec() { return m_RightVec; };
 
 	void Update();
 	void GetViewMatrix(XMMATRIX&);
@@ -51,6 +55,10 @@ private:
 	float m_rotationX, m_rotationY, m_rotationZ;
 	XMMATRIX m_viewMatrix;
 	float m_speed, m_frameTime;;
+	XMFLOAT3 m_UpVec;
+	XMFLOAT3 m_RightVec;
+
+	
 };
 
 #endif

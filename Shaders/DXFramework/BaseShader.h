@@ -14,7 +14,7 @@
 using namespace std;
 using namespace DirectX;
 
-enum ShaderType {kTextureShader, kDissolveShader, kLightShader, kManipulationShader, kDisplacementMapShader, kPostProcessingScene, kShadowShader};
+enum ShaderType {kTextureShader, kDissolveShader, kLightShader, kManipulationShader, kDisplacementMapShader, kPostProcessingScene, kShadowShader, kTessellationShader, kBillboardedParticle};
 
 class BaseShader
 {

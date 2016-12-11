@@ -19,7 +19,7 @@ void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight
 	ImGui_ImplDX11_Init(hwnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
 		
 	// Create Mesh object
-	m_Mesh = new SphereMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
+	m_Mesh = new CubeMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	
 	//create the shader
 	shader = new LightShader(m_Direct3D->GetDevice(),hwnd);
@@ -58,7 +58,7 @@ void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight
 	height = screenHeight;
 
 	//Tesselation
-	tes_mesh = new MyTessellationMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
+	tes_mesh = new TessellationMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	tes_shader = new TessellationShader(m_Direct3D->GetDevice(), hwnd);
 
 
@@ -132,7 +132,7 @@ bool App::Render()
 
 	
 
-	RenderDissolve(dis_amount, fringe);
+	RenderTesselation();
 
 	
 

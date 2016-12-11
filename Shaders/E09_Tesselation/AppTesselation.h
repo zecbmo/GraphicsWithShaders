@@ -8,14 +8,14 @@
 #include "../DXFramework/imgui_impl_dx11.h"
 #include "../DXFramework/baseapplication.h"
 #include "D3D.h"
-#include "../DXFramework/SphereMesh.h"
+#include "../DXFramework/CubeMesh.h"
 #include "../DXFramework/Light.h"
 #include "LightShader.h"
 #include "../DXFramework/OrthoMesh.h"
 #include "../DXFramework/RenderTexture.h"
 #include "TextureShader.h"
 #include "BlurShader.h"
-#include "../DXFramework/MyTesselationMesh.h"
+#include "../DXFramework/TessellationMesh.h"
 #include "TessellationShader.h"
 #include "DissolveShader.h"
 #include "../DXFramework/Texture.h"
@@ -45,7 +45,7 @@ protected:
 
 private:
 	Light* light;
-	SphereMesh* m_Mesh;
+	CubeMesh* m_Mesh;
 	LightShader* shader;
 
 	RenderTexture* m_render_texture;
@@ -66,7 +66,7 @@ private:
 	float width, height;
 
 	//Tesselation
-	MyTessellationMesh* tes_mesh;
+	TessellationMesh* tes_mesh;
 	TessellationShader* tes_shader;
 	float tess_value;
 

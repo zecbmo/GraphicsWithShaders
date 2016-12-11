@@ -22,6 +22,7 @@ public:
 	TessellationShader(ID3D11Device* device, HWND hwnd);
 	~TessellationShader();
 
+	void SetShaderParameters(ShaderArgs& m_ShaderArgs);
 	void SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &projection, ID3D11ShaderResourceView* texture, float tess_factor);
 	void Render(ID3D11DeviceContext* deviceContext, int vertexCount);
 

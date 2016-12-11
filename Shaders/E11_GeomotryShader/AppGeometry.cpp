@@ -90,7 +90,7 @@ void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight
 	point2 = new PointMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	point3 = new PointMesh(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	
-
+	
 
 }
 
@@ -502,7 +502,7 @@ void App::RenderGeometryShaderScene()
 	worldMatrix = transform;
 	//// Send geometry data (from mesh)
 	point1->SendData(m_Direct3D->GetDeviceContext());
-	geo_shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, point1->GetTexture(), m_Camera->GetPosition());
+	geo_shader->SetShaderParameters(m_Direct3D->GetDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, point1->GetTexture(), m_Camera->GetPosition(), m_Camera->GetUpVector());
 	geo_shader->Render(m_Direct3D->GetDeviceContext(), point1->GetIndexCount());
 	//transform = XMMatrixTranslation(1, 0, 0);
 	//worldMatrix = transform;

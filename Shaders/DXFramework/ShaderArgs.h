@@ -27,7 +27,8 @@ public:
 		m_DeviceContext(nullptr), m_DissolveMap(nullptr),
 		m_Texture(nullptr), m_DepthMap(nullptr),  
 		m_WorldMatrix(XMMATRIX()), m_ViewMatrix(XMMATRIX()), 
-		m_ProjectionMatrix(XMMATRIX()), m_IsPointLight(true), m_TextureOn(true), m_IsDisplacementMap(0){}
+		m_ProjectionMatrix(XMMATRIX()), m_IsPointLight(true), m_TextureOn(true), m_IsDisplacementMap(0),	
+		m_TessFactor(1.0f){}
 
 
 	ID3D11ShaderResourceView* m_DepthMap;
@@ -38,6 +39,8 @@ public:
 	bool m_TextureOn; //texture controls
 	int m_NumberOfLights;
 	XMFLOAT3 m_CameraPos;
+	
+
 
 	//Dissolve Shader
 	Texture* m_DissolveMap;
@@ -66,4 +69,15 @@ public:
 	//Shadows
 	float m_ShadowBias;
 	Light* m_ShadowLight;
+
+	//Tessilation
+	float m_TessFactor;
+
+	//GeoShader
+	XMFLOAT3 m_CameraUpVec;
+
+	//Two Textures for passing to the double texture shader
+	ID3D11ShaderResourceView* m_LeftTexture;
+	ID3D11ShaderResourceView* m_RightTexture;
+
 };

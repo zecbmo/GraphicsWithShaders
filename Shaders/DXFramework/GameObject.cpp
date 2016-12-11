@@ -4,7 +4,7 @@
 #include "PlaneMesh.h"
 #include "QuadMesh.h"
 #include "PointMesh.h"
-#include "TessellationMesh.h"
+#include "MyTesselationMesh.h"
 #include "Model.h"
 #include "OrthoMesh.h"
 #include "../Coursework/DissolveShader.h"
@@ -67,7 +67,7 @@ void GameObject::CreateTesselationMesh()
 	{
 		delete m_Mesh;
 	}
-	m_Mesh = new TessellationMesh(m_Device, m_DeviceContext, m_TextureFilename);
+	m_Mesh = new MyTessellationMesh(m_Device, m_DeviceContext, m_TextureFilename);
 }
 
 void GameObject::CreateOrthoMesh(int width, int height, int xPosition, int yPosition)
@@ -123,15 +123,17 @@ void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader, Shad
 	shaderArgs.m_ViewMatrix = viewMatrix;
 	
 	
-	//// Send geometry data (from mesh)
-	m_Mesh->SendData(Direct3D->GetDeviceContext());
-
 	//Depending on the shader type we may want further options here
 	if (Shader->GetShaderType() == kDissolveShader)
 	{
 		//turn on alpha blending for the dissolve shader
 		Direct3D->TurnOnAlphaBlending();
 	}
+
+	//// Send geometry data (from mesh)
+	m_Mesh->SendData(Direct3D->GetDeviceContext());
+
+
 
 	//// Set shader parameters (matrices and texture)
 	Shader->SetShaderParameters(shaderArgs);

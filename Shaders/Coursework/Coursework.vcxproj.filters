@@ -76,28 +76,16 @@
     <FxCompile Include="shaders\Manipulation_vs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\Analglyph_ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Analglyph_vs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="BlurShader.cpp">
-      <Filter>ShaderClasses</Filter>
-    </ClCompile>
-    <ClCompile Include="DepthShader.cpp">
-      <Filter>ShaderClasses</Filter>
-    </ClCompile>
     <ClCompile Include="GeometryShader.cpp">
-      <Filter>ShaderClasses</Filter>
-    </ClCompile>
-    <ClCompile Include="HorizontalBlurShader.cpp">
-      <Filter>ShaderClasses</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowShader.cpp">
-      <Filter>ShaderClasses</Filter>
-    </ClCompile>
-    <ClCompile Include="TessellationShader.cpp">
-      <Filter>ShaderClasses</Filter>
-    </ClCompile>
-    <ClCompile Include="VerticalBlurShader.cpp">
       <Filter>ShaderClasses</Filter>
     </ClCompile>
     <ClCompile Include="AppCoursework.cpp" />
@@ -110,30 +98,34 @@
     <ClCompile Include="LightShader.cpp">
       <Filter>ShaderClasses\Completed</Filter>
     </ClCompile>
+    <ClCompile Include="PostProcessor.cpp" />
+    <ClCompile Include="BlurShader.cpp">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthShader.cpp">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalBlurShader.cpp">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClCompile>
     <ClCompile Include="ManipulationShader.cpp">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowShader.cpp">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClCompile>
+    <ClCompile Include="TessellationShader.cpp">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalBlurShader.cpp">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClCompile>
+    <ClCompile Include="DoubleTextureShader.cpp">
       <Filter>ShaderClasses</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BlurShader.h">
-      <Filter>ShaderClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="DepthShader.h">
-      <Filter>ShaderClasses</Filter>
-    </ClInclude>
     <ClInclude Include="GeometryShader.h">
-      <Filter>ShaderClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="HorizontalBlurShader.h">
-      <Filter>ShaderClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadowShader.h">
-      <Filter>ShaderClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="TessellationShader.h">
-      <Filter>ShaderClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="VerticalBlurShader.h">
       <Filter>ShaderClasses</Filter>
     </ClInclude>
     <ClInclude Include="AppCoursework.h" />
@@ -146,7 +138,29 @@
     <ClInclude Include="LightShader.h">
       <Filter>ShaderClasses\Completed</Filter>
     </ClInclude>
+    <ClInclude Include="PostProcessor.h" />
+    <ClInclude Include="BlurShader.h">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthShader.h">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalBlurShader.h">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClInclude>
     <ClInclude Include="ManipulationShader.h">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowShader.h">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="TessellationShader.h">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="VerticalBlurShader.h">
+      <Filter>ShaderClasses\Completed</Filter>
+    </ClInclude>
+    <ClInclude Include="DoubleTextureShader.h">
       <Filter>ShaderClasses</Filter>
     </ClInclude>
   </ItemGroup>

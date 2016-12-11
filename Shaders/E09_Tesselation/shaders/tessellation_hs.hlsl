@@ -42,7 +42,7 @@ ConstantOutputType PatchConstantFunction(InputPatch<InputType, 3> inputPatch, ui
 
 
 [domain("tri")]
-[partitioning("fractional_odd")]
+[partitioning("fractional_even")]
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(3)]
 [patchconstantfunc("PatchConstantFunction")]

@@ -32,9 +32,18 @@ void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight
 	m_ShadowPlane->CreatePlaneObject();
 	m_ShadowPlane->SetPosition(XMFLOAT3(-50, -5, -10));
 
+	//Shadow sphere
 	GameObject* ShadowSpere =  new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
 	ShadowSpere->CreateSphereObject();
 	ShadowSpere->SetPosition(XMFLOAT3(-5,-2, 1));
+
+	//Tesselation
+	m_TessellatedCube = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
+	m_TessellatedCube->CreateTesselationMesh();
+
+	//Billboard particle example
+	m_Particle = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/DefaultDiffuse.png");
+	m_Particle->CreatePointMesh();
 
 	//Game object list for shadows
 	m_ShadowObjects.push_back(m_GameObject);
@@ -62,6 +71,10 @@ void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight
 	m_VerticalBlurShader = new BlurShader(m_Direct3D->GetDevice(), hwnd, L"shaders/horizontalBlur_vs.hlsl", L"shaders/horizontalBlur_ps.hlsl");
 	m_ShadowShader = new ShadowShader(m_Direct3D->GetDevice(), hwnd);
 	m_DepthShader = new DepthShader(m_Direct3D->GetDevice(), hwnd);
+	m_TessellationShader = new TessellationShader(m_Direct3D->GetDevice(), hwnd);
+	m_GeoShader = new GeometryShader(m_Direct3D->GetDevice(), hwnd);
+	m_DoubleTextureShader = new DoubleTextureShader(m_Direct3D->GetDevice(), hwnd,  L"shaders/Analglyph_vs.hlsl", L"shaders/Analglyph_ps.hlsl");
+
 
 	//Some initial Shader Args
 	m_ShaderArgs.m_DissolveMap = new Texture(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/dissolveMap2.jpg");
@@ -75,7 +88,11 @@ void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight
 
 	//SetUp postprocessor
 	m_PostProcessor = new PostProcessor(m_Direct3D, screenWidth, screenHeight, SCREEN_NEAR, SCREEN_DEPTH);
+
 	m_PostProcessTexture = nullptr;
+	m_LeftRenderTexture = nullptr;
+	m_RightRenderTexture = nullptr;
+
 	SetUpPostProcessingScene();
 
 	//Set Clear Colour
@@ -351,6 +368,36 @@ void App::RenderPostProcessingScene()
 
 		break;
 	}
+	case kAnalglyph:
+	{
+		XMFLOAT3 CamOrigin = m_Camera->GetPosition();
+		XMFLOAT3 CamRightVec = m_Camera->GetRightVec();
+		XMFLOAT3 ScaledRightVec = XMFLOAT3(CamRightVec.x * EYE_SEPARATION, CamRightVec.y * EYE_SEPARATION, CamRightVec.z * EYE_SEPARATION);
+		XMFLOAT3 CamRightOffSet = XMFLOAT3(CamOrigin.x + ScaledRightVec.x, CamOrigin.y + ScaledRightVec.y, CamOrigin.z + ScaledRightVec.z);
+		XMFLOAT3 CamLeftOffSet = XMFLOAT3(CamOrigin.x - ScaledRightVec.x, CamOrigin.y - ScaledRightVec.y, CamOrigin.z - ScaledRightVec.z);
+
+		//Offset Camera by Right vec
+		m_Camera->SetPosition(CamRightOffSet);
+		m_Camera->Update();
+		//Render to texture 
+		m_RightRenderTexture = m_PostProcessor->RenderGameObjectsToTexture(m_SceneObjects, shaderToUse, m_ShaderArgs, m_Camera, m_ClearColour);
+		//Offset Camera by Right vec again but minus
+		m_Camera->SetPosition(CamLeftOffSet);
+		m_Camera->Update();
+		//Render to texture 
+		m_LeftRenderTexture = m_PostProcessor->RenderGameObjectsToTexture(m_SceneObjects, shaderToUse, m_ShaderArgs, m_Camera, m_ClearColour);
+		//SetShader Args - left and right texture 
+		m_ShaderArgs.m_RightTexture = m_RightRenderTexture->GetShaderResourceView();
+		m_ShaderArgs.m_LeftTexture = m_LeftRenderTexture->GetShaderResourceView();
+		//Render Texture to post processing text using two textures
+		m_PostProcessTexture = m_PostProcessor->PostProcessTexture(m_PostProcessTexture, m_DoubleTextureShader, m_ShaderArgs, m_Camera, m_ClearColour);
+		//render final texture to screen
+		m_PostProcessor->RenderTextureToScene(m_PostProcessTexture, m_Camera, m_TextureShader, m_ShaderArgs);
+		//Reset Camera 
+		m_Camera->SetPosition(CamOrigin);
+		break;
+
+	}
 	default:
 		break;
 	}
@@ -384,7 +431,7 @@ void App::CreateGUIWindow()
 				if (ImGui::BeginMenu("Shader Options"))
 				{
 					//DropDown to Select Shader
-					ImGui::Combo("Shader Select", &m_ShaderNumber, "Texture Shader\0Dissolve Shader\0Light Shader\0Manipulation Shader\0Displacement Map Shader\0Post Processing Scene\0Shadow Shader");
+					ImGui::Combo("Shader Select", &m_ShaderNumber, "Texture Shader\0Dissolve Shader\0Light Shader\0Manipulation Shader\0Displacement Map Shader\0Post Processing Scene\0Shadow Shader\0Tessellation\0BillBoarded Particle\0");
 
 					//Switch the GUI Based on what shader is selected (e.g. dissolve sliders will only show up when dissolve shader selected)
 					switch (m_ShaderNumber)
@@ -406,7 +453,7 @@ void App::CreateGUIWindow()
 						ImGui::SliderFloat("Height", &Args->m_Height, 0.0f, 10.0f);
 						break;
 					case kPostProcessingScene:
-						ImGui::Combo("Post Process Shader", &m_PostProcessShader, "Render To Texture\0Box Blur\0Gaussian Blur\0");
+						ImGui::Combo("Post Process Shader", &m_PostProcessShader, "Render To Texture\0Box Blur\0Gaussian Blur\0Anaglyph\0");
 						ShowBasePostShadersGUI();						
 						break;
 					case kShadowShader:
@@ -440,6 +487,14 @@ void App::CreateGUIWindow()
 
 					}
 						break;
+					case kTessellationShader:
+					{
+						ImGui::SliderFloat("Tess Factor", &Args->m_TessFactor, 1.0f, 32.0f);
+					}
+					case kBillboardedParticle:
+					{
+						break;
+					}
 					default:
 						break;
 					}
@@ -898,6 +953,19 @@ bool App::Render()
 	case kShadowShader:
 	{
 		RenderShadowScene();
+		break;
+	}
+	case kTessellationShader:
+	{
+		RenderTessellationScene();
+		break;
+	}
+	case kBillboardedParticle:
+	{
+		m_ShaderArgs.m_CameraUpVec = m_Camera->GetUpVector();
+		m_Particle->Render(m_Direct3D, m_Camera, m_GeoShader, m_ShaderArgs);
+		m_Direct3D->GetDeviceContext()->GSSetShader(NULL, NULL, 0);
+		break;
 	}
 	default:
 		break;
@@ -911,7 +979,15 @@ bool App::Render()
 	m_PostProcessor->Reset();
 	return true;
 }
+void App::RenderTessellationScene()
+{
 
+	m_TessellatedCube->Render(m_Direct3D, m_Camera, m_TessellationShader, m_ShaderArgs);
+
+	m_Direct3D->GetDeviceContext()->HSSetShader(NULL, NULL, 0);
+	m_Direct3D->GetDeviceContext()->DSSetShader(NULL, NULL, 0);
+
+}
 void App::RenderShadowScene()
 {
 

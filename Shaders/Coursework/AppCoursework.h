@@ -19,9 +19,12 @@
 #include "GeometryShader.h"
 #include "ManipulationShader.h"
 #include "PostProcessor.h"
+#include "DoubleTextureShader.h"
+
+#define EYE_SEPARATION 0.3f
 
 enum TextureType {kDefault, kCheckerBoard, kBunny, kDissolveMap, kGradientMap, kPatrickStarT, kSpongeBobT, kGaryT};
-enum PostProcessType {kNone, kBoxBlur, kGausianBlur };
+enum PostProcessType {kNone, kBoxBlur, kGausianBlur, kAnalglyph };
 
 /* The Application class
 *
@@ -54,6 +57,8 @@ private:
 	GameObject* m_GameObject;
 	GameObject* m_LightDebug[4];
 	GameObject* m_ShadowPlane;
+	GameObject* m_TessellatedCube;
+	GameObject* m_Particle;
 
 	//Post Processing Scene
 	void SetUpPostProcessingScene();
@@ -66,6 +71,9 @@ private:
 	//Post processing
 	PostProcessor* m_PostProcessor;
 	RenderTexture* m_PostProcessTexture;
+	RenderTexture* m_LeftRenderTexture;
+	RenderTexture* m_RightRenderTexture;
+
 
 	//Shaders 
 	TextureShader* m_TextureShader;
@@ -78,13 +86,18 @@ private:
 	BlurShader* m_VerticalBlurShader;
 	ShadowShader* m_ShadowShader;
 	DepthShader* m_DepthShader;
-
+	TessellationShader* m_TessellationShader;
+	GeometryShader* m_GeoShader;
+	DoubleTextureShader* m_DoubleTextureShader;
 	//Shader Arguments
 	ShaderArgs m_ShaderArgs;
 
 	//Shadow Game Object List for depth buffer
 	std::list<GameObject*> m_ShadowObjects;
 	void RenderShadowScene();
+
+	//Tessellation Scene
+	void RenderTessellationScene();
 
 	//ImGUI will give user control over shapes and shaders in runtime
 	void CreateGUIWindow();

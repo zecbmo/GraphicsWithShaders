@@ -85,7 +85,7 @@ void GeometryShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 }
 
 
-void GeometryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, XMFLOAT3 CameraPosition)
+void GeometryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, XMFLOAT3 CameraPosition, XMFLOAT3 CamUpVec)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -111,6 +111,8 @@ void GeometryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, con
 	dataPtr->projection = tproj;
 	dataPtr->CameraPos = CameraPosition;
 	dataPtr->padding = 0;
+	dataPtr->CameraUpVec = CamUpVec;
+	dataPtr->padding2 = 0;
 	// Unlock the constant buffer.
 	deviceContext->Unmap(m_matrixBuffer, 0);
 

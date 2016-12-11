@@ -1,14 +1,14 @@
 // texture shader.cpp
-#include "GeometryShader.h"
+#include "DoubleTextureShader.h"
 
 
-GeometryShader::GeometryShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
+DoubleTextureShader::DoubleTextureShader(ID3D11Device* device, HWND hwnd, WCHAR* vs_filename, WCHAR* ps_filename) : BaseShader(device, hwnd)
 {
-	InitShader(L"shaders/GeometryShader_vs.hlsl", L"shaders/GeometryShader_gs.hlsl", L"shaders/GeometryShader_ps.hlsl");
+	InitShader(vs_filename, ps_filename);
 }
 
 
-GeometryShader::~GeometryShader()
+DoubleTextureShader::~DoubleTextureShader()
 {
 	// Release the sampler state.
 	if (m_sampleState)
@@ -34,29 +34,9 @@ GeometryShader::~GeometryShader()
 	//Release base shader components
 	BaseShader::~BaseShader();
 }
-void GeometryShader::InitShader(WCHAR* vsFilename, WCHAR* gsFilename, WCHAR* psFilename)
-{
-	// InitShader must be overwritten and it will load both vertex and pixel shaders + setup buffers
-	InitShader(vsFilename, psFilename);
-
-	// Load other required shaders.
-	loadGeometryShader(gsFilename);
-	
-}
 
 
-void GeometryShader::SetShaderParameters(ShaderArgs & m_ShaderArgs)
-{
-	//Helper function that is overloaded from the base class
-	SetShaderParameters(
-		m_ShaderArgs.m_DeviceContext,
-		m_ShaderArgs.m_WorldMatrix,
-		m_ShaderArgs.m_ViewMatrix,
-		m_ShaderArgs.m_ProjectionMatrix,
-		m_ShaderArgs.m_Texture,
-		m_ShaderArgs.m_CameraPos, m_ShaderArgs.m_CameraUpVec);
-}
-void GeometryShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
+void DoubleTextureShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 {
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -67,7 +47,7 @@ void GeometryShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
 	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferCameraType);
+	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
 	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	matrixBufferDesc.MiscFlags = 0;
@@ -97,11 +77,24 @@ void GeometryShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 }
 
 
-void GeometryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, XMFLOAT3 CameraPosition, XMFLOAT3 CameraUpVec)
+void DoubleTextureShader::SetShaderParameters(ShaderArgs & m_ShaderArgs)
+{
+	//Helper function that is overloaded from the base class
+	SetShaderParameters(
+		m_ShaderArgs.m_DeviceContext,
+		m_ShaderArgs.m_WorldMatrix,
+		m_ShaderArgs.m_ViewMatrix,
+		m_ShaderArgs.m_ProjectionMatrix,
+		m_ShaderArgs.m_LeftTexture,
+		m_ShaderArgs.m_RightTexture
+		);
+}
+
+void DoubleTextureShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView* texture2)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	MatrixBufferCameraType* dataPtr;
+	MatrixBufferType* dataPtr;
 	unsigned int bufferNumber;
 	XMMATRIX tworld, tview, tproj;
 
@@ -115,16 +108,13 @@ void GeometryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, con
 	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	// Get a pointer to the data in the constant buffer.
-	dataPtr = (MatrixBufferCameraType*)mappedResource.pData;
+	dataPtr = (MatrixBufferType*)mappedResource.pData;
 
 	// Copy the matrices into the constant buffer.
 	dataPtr->world = tworld;// worldMatrix;
 	dataPtr->view = tview;
 	dataPtr->projection = tproj;
-	dataPtr->CameraPos = CameraPosition;
-	dataPtr->padding = 0;
-	dataPtr->CameraUpVec = CameraUpVec;
-	dataPtr->padding2 = 0;
+
 	// Unlock the constant buffer.
 	deviceContext->Unmap(m_matrixBuffer, 0);
 
@@ -132,13 +122,16 @@ void GeometryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, con
 	bufferNumber = 0;
 
 	// Now set the constant buffer in the vertex shader with the updated values.
-	deviceContext->GSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 
 	// Set shader texture resource in the pixel shader.
-	//deviceContext->PSSetShaderResources(0, 1, &texture);
+	deviceContext->PSSetShaderResources(0, 1, &texture);
+
+	deviceContext->PSSetShaderResources(1, 1, &texture2);
+
 }
 
-void GeometryShader::Render(ID3D11DeviceContext* deviceContext, int indexCount)
+void DoubleTextureShader::Render(ID3D11DeviceContext* deviceContext, int indexCount)
 {
 	// Set the sampler state in the pixel shader.
 	deviceContext->PSSetSamplers(0, 1, &m_sampleState);

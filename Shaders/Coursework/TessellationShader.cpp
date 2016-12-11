@@ -5,6 +5,7 @@
 TessellationShader::TessellationShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
 {
 	InitShader(L"shaders/tessellation_vs.hlsl", L"shaders/tessellation_hs.hlsl", L"shaders/tessellation_ds.hlsl", L"shaders/tessellation_ps.hlsl");
+	m_ShaderType = kTessellationShader;
 }
 
 
@@ -97,6 +98,17 @@ void TessellationShader::InitShader(WCHAR* vsFilename, WCHAR* hsFilename, WCHAR*
 	loadDomainShader(dsFilename);
 }
 
+
+void TessellationShader::SetShaderParameters(ShaderArgs & m_ShaderArgs)
+{
+
+	SetShaderParameters(
+		m_ShaderArgs.m_DeviceContext,
+		m_ShaderArgs.m_WorldMatrix,
+		m_ShaderArgs.m_ViewMatrix,
+		m_ShaderArgs.m_ProjectionMatrix,
+		m_ShaderArgs.m_Texture, m_ShaderArgs.m_TessFactor);
+}
 
 void TessellationShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, float tess_factor)
 {
