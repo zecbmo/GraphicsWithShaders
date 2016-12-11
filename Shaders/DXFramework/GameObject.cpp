@@ -3,7 +3,7 @@
 #include "CubeMesh.h"
 #include "PlaneMesh.h"
 #include "QuadMesh.h"
-#include "PointMesh.h"
+#include "SpherePointMesh.h"
 #include "MyTesselationMesh.h"
 #include "Model.h"
 #include "OrthoMesh.h"
@@ -94,7 +94,7 @@ void GameObject::CreatePointMesh()
 	{
 		delete m_Mesh;
 	}
-	m_Mesh = new PointMesh(m_Device, m_DeviceContext, m_TextureFilename);
+	m_Mesh = new SpherePointMesh(m_Device, m_DeviceContext, m_TextureFilename);
 }
 
 void GameObject::Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader, ShaderArgs& shaderArgs)
@@ -213,4 +213,63 @@ void GameObject::RenderTargetFunction(D3D* Direct3D,  BaseShader* Shader, Shader
 	Shader->SetShaderParameters(shaderArgs);
 	// Render object (combination of mesh geometry and shader process
 	Shader->Render(Direct3D->GetDeviceContext(), m_Mesh->GetIndexCount());
+}
+void GameObject::RenderSpinningObject(D3D* Direct3D, Camera * Camera, BaseShader* Shader, ShaderArgs& shaderArgs, float dt, float RotSpeed, float ScaleSpeed)
+{
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+
+	//// Get the world, view, projection, and ortho matrices from the camera and Direct3D objects.
+	Direct3D->GetWorldMatrix(worldMatrix);
+	Camera->GetViewMatrix(viewMatrix);
+	Direct3D->GetProjectionMatrix(projectionMatrix);
+
+	m_Rotation.y += RotSpeed * dt;
+
+	m_ScaleHelper += ScaleSpeed * dt;
+
+	m_Scale.x = sin(m_ScaleHelper);
+	m_Scale.z = sin(m_ScaleHelper);
+
+
+	//Do the Transforms on the Object
+	XMMATRIX transform = XMMatrixTranslation(m_Position.x, m_Position.y, m_Position.z);
+	XMMATRIX rotation = XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y, m_Rotation.z);
+	XMMATRIX scale = XMMatrixScaling(m_Scale.x, m_Scale.y, m_Scale.z);
+
+	XMMATRIX preScale = XMMatrixMultiply(rotation, transform);
+	worldMatrix = XMMatrixMultiply(scale, preScale);
+
+	//Set the required shader args - means we don't have to do it manually (this is the base for what every shader needs)
+	shaderArgs.m_DeviceContext = Direct3D->GetDeviceContext();
+	shaderArgs.m_Texture = m_Mesh->GetTexture();
+	shaderArgs.m_WorldMatrix = worldMatrix;
+	shaderArgs.m_ProjectionMatrix = projectionMatrix;
+	shaderArgs.m_ViewMatrix = viewMatrix;
+
+
+	//Depending on the shader type we may want further options here
+	if (Shader->GetShaderType() == kDissolveShader)
+	{
+		//turn on alpha blending for the dissolve shader
+		Direct3D->TurnOnAlphaBlending();
+	}
+
+	//// Send geometry data (from mesh)
+	m_Mesh->SendData(Direct3D->GetDeviceContext());
+
+
+
+	//// Set shader parameters (matrices and texture)
+	Shader->SetShaderParameters(shaderArgs);
+
+	//// Render object (combination of mesh geometry and shader process
+	Shader->Render(Direct3D->GetDeviceContext(), m_Mesh->GetIndexCount());
+
+	//reset additional options based on shader type
+	if (Shader->GetShaderType() == kDissolveShader)
+	{
+		//turn off alpha blending for dissolve shader
+		Direct3D->TurnOffAlphaBlending();
+	}
+
 }

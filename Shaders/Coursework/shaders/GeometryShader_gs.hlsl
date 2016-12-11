@@ -38,14 +38,14 @@ void main(
 	input[0].position.w = 1.0f;
 
 	float4 NewInputPosition = input[0].position;
-
+	NewInputPosition = mul(NewInputPosition, worldMatrix);
 
 	float3 LookAtVec = normalize(CameraPosition - NewInputPosition.xyz);
 	float3 RightVec = normalize(cross(LookAtVec, CameraUpVec));
 	float3 UpVec = normalize(cross(RightVec, LookAtVec));
 
-	RightVec *= 0.5f;
-	UpVec *= 0.5f;
+	RightVec *= 0.02f;
+	UpVec *= 0.02f;
 
 	float3 Pos[4];
 
@@ -68,7 +68,7 @@ void main(
 
 		output.position = NewPos;
 
-		output.position = mul(output.position, worldMatrix);
+		//output.position = mul(output.position, worldMatrix);
 		output.position = mul(output.position, viewMatrix);
 		output.position = mul(output.position, projectionMatrix);
 

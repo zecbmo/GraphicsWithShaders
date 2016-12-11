@@ -173,7 +173,7 @@ void App::SetupLights()
 		Newlight->SetAmbientColour(0.2f, 0.2f, 0.2f, 1.0f);
 		Newlight->SetLightPosition(pos[i]); //Give EachLight a dif position	
 		Newlight->SetSpecularColour(1.0f, 1.0f, 1.0f, 1.0f);
-		Newlight->SetSpecularPower(10);
+		Newlight->SetSpecularPower(50);
 
 		m_ShaderArgs.m_Lights.push_back(Newlight);
 		Newlight = nullptr;
@@ -196,19 +196,19 @@ void App::SetupLights()
 
 void App::SetUpPostProcessingScene()
 {
-	GameObject* car = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/car.png");
-	car->LoadModel(L"../res/car.obj");
-	car->SetPosition(XMFLOAT3(-6, -5, 10));
-	//car->SetScale(XMFLOAT3(0.02, 0.02, 0.02));
+	//GameObject* car = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/car.png");
+	//car->LoadModel(L"../res/car.obj");
+	//car->SetPosition(XMFLOAT3(-6, -5, 10));
+	////car->SetScale(XMFLOAT3(0.02, 0.02, 0.02));
 
-	GameObject* truck = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/truck.png");
-	truck->LoadModel(L"../res/truck.obj");
-	truck->SetPosition(XMFLOAT3(6, -5, 13));
-	//car->SetScale(XMFLOAT3(0.02, 0.02, 0.02));
+	//GameObject* truck = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/truck.png");
+	//truck->LoadModel(L"../res/truck.obj");
+	//truck->SetPosition(XMFLOAT3(6, -5, 13));
+	////car->SetScale(XMFLOAT3(0.02, 0.02, 0.02));
 
-	GameObject* dumpster = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/dumpster.png");
-	dumpster->LoadModel(L"../res/dumpster.obj");
-	dumpster->SetPosition(XMFLOAT3(-7, -5, 20));
+	//GameObject* dumpster = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/dumpster.png");
+	//dumpster->LoadModel(L"../res/dumpster.obj");
+	//dumpster->SetPosition(XMFLOAT3(-7, -5, 20));
 
 	GameObject* road = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/road.jpg");
 	road->CreatePlaneObject(200);
@@ -221,7 +221,7 @@ void App::SetUpPostProcessingScene()
 	m_SceneObjects.push_back(wall);
 
 
-	GameObject* rabbit = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/rabbit.png");
+	/*GameObject* rabbit = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/rabbit.png");
 	rabbit->LoadModel(L"../res/rabbit.obj");
 	rabbit->SetPosition(XMFLOAT3(9, -5, 27));
 	rabbit->SetRotation(XMFLOAT3(0, 45, 0));
@@ -234,7 +234,7 @@ void App::SetUpPostProcessingScene()
 	patrick->SetRotation(XMFLOAT3(0, -45, 0));
 	patrick->SetScale(XMFLOAT3(3, 3, 3));
 	m_SceneObjects.push_back(patrick);
-
+*/
 
 	CreatePathHelper(XMFLOAT3(-20, -5.5, 0));
 	CreatePathHelper(XMFLOAT3(-20, -5.5, 20));
@@ -265,10 +265,10 @@ void App::SetUpPostProcessingScene()
 
 
 
-	m_SceneObjects.push_back(car);
-	m_SceneObjects.push_back(truck);
+	//m_SceneObjects.push_back(car);
+	//m_SceneObjects.push_back(truck);
 	m_SceneObjects.push_back(road);
-	m_SceneObjects.push_back(dumpster);
+	//m_SceneObjects.push_back(dumpster);
 }
 
 void App::CreatePathHelper(XMFLOAT3 pos)
@@ -963,7 +963,7 @@ bool App::Render()
 	case kBillboardedParticle:
 	{
 		m_ShaderArgs.m_CameraUpVec = m_Camera->GetUpVector();
-		m_Particle->Render(m_Direct3D, m_Camera, m_GeoShader, m_ShaderArgs);
+		m_Particle->RenderSpinningObject(m_Direct3D, m_Camera, m_GeoShader, m_ShaderArgs, m_Timer->GetTime(), 1, 1);
 		m_Direct3D->GetDeviceContext()->GSSetShader(NULL, NULL, 0);
 		break;
 	}

@@ -35,6 +35,7 @@ public:
 	//In future it may be better to overload the Render Function for certain Shaders (e.g. Tesselation/Geomotry)
 	virtual void Render(D3D* Direct3D, Camera * Camera, BaseShader* Shader, ShaderArgs& shaderArgs);
 	virtual void RenderFromLightSource(D3D* Direct3D, Light * light, BaseShader* Shader, ShaderArgs& shaderArgs);
+	void RenderSpinningObject(D3D* Direct3D, Camera * Camera, BaseShader* Shader, ShaderArgs& shaderArgs, float dt, float RotSpeed, float ScaleSpeed);
 	void GameObject::RenderTargetFunction(D3D* Direct3D, BaseShader* Shader, ShaderArgs& shaderArgs);
 	
 	//Able to edit the public member data when called e.g GameObject->ModifyShaderArgs()->Light = m_Light;
@@ -66,5 +67,7 @@ private:
 	ID3D11Device* m_Device;
 	ID3D11DeviceContext* m_DeviceContext;
 	WCHAR* m_TextureFilename;
+
+	float m_ScaleHelper;
 };
 
