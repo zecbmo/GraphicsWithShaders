@@ -52,6 +52,7 @@ protected:
 private:
 	//Light Settings
 	void SetupLights();
+	void ResetLights();
 	
 	//GameObjects in Scene
 	GameObject* m_GameObject;
@@ -59,6 +60,8 @@ private:
 	GameObject* m_ShadowPlane;
 	GameObject* m_TessellatedCube;
 	GameObject* m_Particle;
+	void ResetGameObject();
+
 
 	//Post Processing Scene
 	void SetUpPostProcessingScene();
@@ -91,6 +94,7 @@ private:
 	DoubleTextureShader* m_DoubleTextureShader;
 	//Shader Arguments
 	ShaderArgs m_ShaderArgs;
+	void ReloadShaderSettings();
 
 	//Shadow Game Object List for depth buffer
 	std::list<GameObject*> m_ShadowObjects;
@@ -107,6 +111,7 @@ private:
 	int m_ModelNumber;
 	int m_PrevModelNumber;
 	int m_ShaderNumber;
+	int m_PrevShaderNumber;
 	int m_TextureNumber;
 	int m_PrevTextureNumber;
 	bool m_ShowDebugPositions;
@@ -119,6 +124,9 @@ private:
 
 	//Reload the Shape
 	void ReloadShape();
+
+	//Camera Reset
+	void ResetCamera();
 
 	//Clear Colour
 	XMFLOAT3 m_ClearColour;

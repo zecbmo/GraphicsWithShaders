@@ -194,21 +194,52 @@ void App::SetupLights()
 
 }
 
+void App::ResetLights()
+{
+	//Get Pointer to Args for easy access
+	ShaderArgs* Args = &m_ShaderArgs;
+
+	XMFLOAT3 pos[4] = { XMFLOAT3(-5,0,0),
+		XMFLOAT3(5,0,0),
+		XMFLOAT3(0,0,5),
+		XMFLOAT3(0,0,-5), };
+
+	//loop through lights and reset
+	int i = 0;
+	for (auto iter : Args->m_Lights)
+	{
+
+		iter->SetLightPosition(pos[i]);
+		i++;
+	}
+	
+	
+}
+
+void App::ResetGameObject()
+{
+	m_GameObject->SetPosition(XMFLOAT3(0, 0, 0));
+	m_GameObject->SetRotation(XMFLOAT3(0, 0, 0));
+	m_GameObject->SetScale(XMFLOAT3(1,1, 1));
+
+
+}
+
 void App::SetUpPostProcessingScene()
 {
-	//GameObject* car = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/car.png");
-	//car->LoadModel(L"../res/car.obj");
-	//car->SetPosition(XMFLOAT3(-6, -5, 10));
-	////car->SetScale(XMFLOAT3(0.02, 0.02, 0.02));
+	GameObject* car = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/car.png");
+	car->LoadModel(L"../res/car.obj");
+	car->SetPosition(XMFLOAT3(-6, -5, 10));
+	//car->SetScale(XMFLOAT3(0.02, 0.02, 0.02));
 
-	//GameObject* truck = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/truck.png");
-	//truck->LoadModel(L"../res/truck.obj");
-	//truck->SetPosition(XMFLOAT3(6, -5, 13));
-	////car->SetScale(XMFLOAT3(0.02, 0.02, 0.02));
+	GameObject* truck = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/truck.png");
+	truck->LoadModel(L"../res/truck.obj");
+	truck->SetPosition(XMFLOAT3(6, -5, 13));
+	//car->SetScale(XMFLOAT3(0.02, 0.02, 0.02));
 
-	//GameObject* dumpster = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/dumpster.png");
-	//dumpster->LoadModel(L"../res/dumpster.obj");
-	//dumpster->SetPosition(XMFLOAT3(-7, -5, 20));
+	GameObject* dumpster = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/dumpster.png");
+	dumpster->LoadModel(L"../res/dumpster.obj");
+	dumpster->SetPosition(XMFLOAT3(-7, -5, 20));
 
 	GameObject* road = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/road.jpg");
 	road->CreatePlaneObject(200);
@@ -221,7 +252,7 @@ void App::SetUpPostProcessingScene()
 	m_SceneObjects.push_back(wall);
 
 
-	/*GameObject* rabbit = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/rabbit.png");
+	GameObject* rabbit = new GameObject(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), L"../res/rabbit.png");
 	rabbit->LoadModel(L"../res/rabbit.obj");
 	rabbit->SetPosition(XMFLOAT3(9, -5, 27));
 	rabbit->SetRotation(XMFLOAT3(0, 45, 0));
@@ -234,7 +265,7 @@ void App::SetUpPostProcessingScene()
 	patrick->SetRotation(XMFLOAT3(0, -45, 0));
 	patrick->SetScale(XMFLOAT3(3, 3, 3));
 	m_SceneObjects.push_back(patrick);
-*/
+
 
 	CreatePathHelper(XMFLOAT3(-20, -5.5, 0));
 	CreatePathHelper(XMFLOAT3(-20, -5.5, 20));
@@ -265,10 +296,10 @@ void App::SetUpPostProcessingScene()
 
 
 
-	//m_SceneObjects.push_back(car);
-	//m_SceneObjects.push_back(truck);
+	m_SceneObjects.push_back(car);
+	m_SceneObjects.push_back(truck);
 	m_SceneObjects.push_back(road);
-	//m_SceneObjects.push_back(dumpster);
+	m_SceneObjects.push_back(dumpster);
 }
 
 void App::CreatePathHelper(XMFLOAT3 pos)
@@ -507,7 +538,7 @@ void App::CreateGUIWindow()
 			ImGui::EndMainMenuBar();
 		}
 
-		ImGui::ShowTestWindow();
+	
 
 	}
 	/****************************************  Old window code - was juust a pop up window  ***************************************************/
@@ -597,19 +628,7 @@ void App::ShowLightGUI()
 	if (ImGui::Button("Reset Lights")) { printf("Clicked\n"); a ^= 1; }
 	if (a)
 	{
-		XMFLOAT3 pos[4] = { XMFLOAT3(-5,0,0),
-			XMFLOAT3(5,0,0),
-			XMFLOAT3(0,0,5),
-			XMFLOAT3(0,0,-5), };
-
-		//loop through lights and reset
-		int i = 0;
-		for (auto iter : Args->m_Lights)
-		{
-
-			iter->SetLightPosition(pos[i]);
-			i++;
-		}
+		ResetLights();
 		a = false;
 	}
 
@@ -839,6 +858,7 @@ void App::ReloadShape()
 		}
 		
 
+		m_GameObject->SetPosition(XMFLOAT3(0.0f, 0.0f, 0.0f));
 
 		switch (m_ModelNumber)
 		{
@@ -888,6 +908,13 @@ void App::ReloadShape()
 	}
 }
 
+void App::ResetCamera()
+{
+
+	m_Camera->SetPosition(XMFLOAT3(0, 0, -10));
+	m_Camera->SetRotation(0, 0, 0);
+}
+
 bool App::Render()
 {
 	//Create the GUI window with all the fancy gidgets
@@ -895,7 +922,7 @@ bool App::Render()
 
 	//Reload the shape if certain changes are made
 	ReloadShape();
-	
+	ReloadShaderSettings();
 
 	//// Clear the scene. (default blue colour)
 	m_Direct3D->BeginScene(m_ClearColour.x, m_ClearColour.y, m_ClearColour.z, 1.0f);
@@ -986,6 +1013,29 @@ void App::RenderTessellationScene()
 
 	m_Direct3D->GetDeviceContext()->HSSetShader(NULL, NULL, 0);
 	m_Direct3D->GetDeviceContext()->DSSetShader(NULL, NULL, 0);
+
+}
+void App::ReloadShaderSettings()
+{
+	if (m_ShaderNumber != m_PrevShaderNumber)
+	{
+		switch (m_ShaderNumber)
+		{
+		default:
+		{
+			ResetGameObject();
+			ResetLights();
+			ResetCamera();
+			m_ModelNumber = 0;
+			ReloadShape();
+			break;
+		}
+		}
+
+		m_PrevShaderNumber = m_ShaderNumber;
+
+	}
+
 
 }
 void App::RenderShadowScene()

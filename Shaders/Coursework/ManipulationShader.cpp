@@ -168,11 +168,14 @@ void ManipulationShader::SetShaderParameters(ShaderArgs& ShaderArgs)
 	ShaderArgs.m_NumberOfLights = 1;
 	auto light = ShaderArgs.m_Lights.begin();
 
-	(*light)->SetPosition(-10,10, 100);
-	(*light)->SetDiffuseColour(1,1,1,1);
-	(*light)->SetAmbientColour(0.2f, 0.2f, 0.2f, 1.0f);
-	(*light)->SetSpecularColour(0.0f, 0.0f, 0.0f, 1.0f);
-	(*light)->SetSpecularPower(100);
+	if (ShaderArgs.m_IsDisplacementMap)
+	{
+		(*light)->SetPosition(-10,10, 100);
+		(*light)->SetDiffuseColour(1,1,1,1);
+		(*light)->SetAmbientColour(0.2f, 0.2f, 0.2f, 1.0f);
+		(*light)->SetSpecularColour(0.0f, 0.0f, 0.0f, 1.0f);
+		(*light)->SetSpecularPower(100);
+	}
 
 	SetShaderParameters(
 		ShaderArgs.m_DeviceContext,
