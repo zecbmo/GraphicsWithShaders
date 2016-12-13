@@ -78,7 +78,7 @@ void main(
 		output.normal = normalize(output.normal);
 
 
-		output.colour = RightVec;
+		output.colour = output.position.xyz;
 
 		triStream.Append(output);
 	}

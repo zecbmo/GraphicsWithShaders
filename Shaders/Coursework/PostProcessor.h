@@ -28,7 +28,14 @@ public:
 	~PostProcessor();
 
 	//First Pass Function - Renders Scene to texture - has flags for setting custom width and height- if not set will default to the screen width and height 
-	RenderTexture* RenderGameObjectsToTexture(std::list<GameObject*> gameObjects, BaseShader * shader, ShaderArgs &shaderArgs, Camera* camera, XMFLOAT3 clearColour, RenderTargetFlag flag = kScreenSize);
+
+	RenderTexture* RenderGameObjectsToTexture(	std::list<GameObject*> gameObjects, 
+												BaseShader * shader,
+												ShaderArgs &shaderArgs, 
+												Camera* camera, 
+												XMFLOAT3 clearColour, 
+												RenderTargetFlag flag = kScreenSize);
+
 	RenderTexture* RenderDepthToTexture(std::list<GameObject*> gameObjects, BaseShader * shader, ShaderArgs &shaderArgs, Camera* camera, XMFLOAT3 clearColour, Light* light = nullptr, RenderTargetFlag flag = kScreenSize);
 	RenderTexture* PostProcessTexture(RenderTexture* RendTexture, BaseShader* postProcessShader, ShaderArgs &shaderArgs, Camera* camera, XMFLOAT3 clearColour, RenderTargetFlag flag = kScreenSize);
 	void RenderTextureToScene(RenderTexture* renderTexture, Camera* camera, BaseShader* textureShader, ShaderArgs &shaderArgs);

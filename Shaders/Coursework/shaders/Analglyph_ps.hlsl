@@ -2,8 +2,7 @@
 // Basic fragment shader for rendering textured geometry
 
 
-//articles that helped http://www.gamedev.net/topic/623471-anaglyph-directx-9/
-//http://gamedev.stackexchange.com/questions/56505/are-anaglyph-3d-shaders-used-in-game-engines
+//articles that helped http://paulbourke.net/stereographics/anaglyph/
 
 Texture2D texture1 : register(t0);
 Texture2D texture2 : register(t1);
@@ -35,8 +34,8 @@ float4 main(InputType input) : SV_TARGET
 
 
 	// Sample the pixel color from the texture using the sampler at this texture coordinate location.
-	textureColorRed = texture1.Sample(Sampler0, input.tex);
-	textureColorBlue = texture2.Sample(Sampler0, input.tex);
+	/*textureColorRed = 
+	textureColorBlue = texture2.Sample(Sampler0, input.tex);*/
 
 	////saturate the colour values
 	//float greyscale = dot(textureColorRed.rgb, float3(0.30, 0.59, 0.11));
@@ -58,10 +57,10 @@ float4 main(InputType input) : SV_TARGET
 
 
 	float4 Color1;
-	Color1 = textureColorBlue;
+	Color1 = texture2.Sample(Sampler0, input.tex);;
 
 	float4 Color2;
-	Color2 = textureColorRed;
+	Color2 = texture1.Sample(Sampler0, input.tex);;
 
 	Color1.r = Color2.r;
 	Color1.g = Color1.g;

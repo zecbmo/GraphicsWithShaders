@@ -12,7 +12,7 @@ float4 main(InputType input) : SV_TARGET
 	float g = 0;
 	float b = 0;
 	// Get the depth value of the pixel by dividing the Z pixel depth by the homogeneous W coordinate.
-	depthValue = input.depthPosition.z / input.depthPosition.w;
+	depthValue = (input.depthPosition.z / input.depthPosition.w);
 
 	//if(depthValue < 0.9 )
 	//{
