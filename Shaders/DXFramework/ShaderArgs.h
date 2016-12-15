@@ -28,7 +28,7 @@ public:
 		m_Texture(nullptr), m_DepthMap(nullptr),  
 		m_WorldMatrix(XMMATRIX()), m_ViewMatrix(XMMATRIX()), 
 		m_ProjectionMatrix(XMMATRIX()), m_IsPointLight(true), m_TextureOn(true), m_IsDisplacementMap(0),	
-		m_TessFactor(1.0f){}
+		m_TessFactor(1.0f), m_ExplosionAmount(0){}
 
 
 	ID3D11ShaderResourceView* m_DepthMap;
@@ -75,6 +75,7 @@ public:
 
 	//GeoShader
 	XMFLOAT3 m_CameraUpVec;
+	float m_ExplosionAmount;
 
 	//Two Textures for passing to the double texture shader
 	ID3D11ShaderResourceView* m_LeftTexture;

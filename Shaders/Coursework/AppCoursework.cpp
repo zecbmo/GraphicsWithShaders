@@ -72,7 +72,8 @@ void App::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight
 	m_ShadowShader = new ShadowShader(m_Direct3D->GetDevice(), hwnd);
 	m_DepthShader = new DepthShader(m_Direct3D->GetDevice(), hwnd);
 	m_TessellationShader = new TessellationShader(m_Direct3D->GetDevice(), hwnd);
-	m_GeoShader = new GeometryShader(m_Direct3D->GetDevice(), hwnd);
+	m_GeoShader = new GeometryShader(m_Direct3D->GetDevice(), hwnd, L"shaders/GeometryShader_gs.hlsl");
+	m_ExplosionShader = new GeometryShader(m_Direct3D->GetDevice(), hwnd, L"shaders/GeometryShaderExplosion_gs.hlsl", L"shaders/texture_ps.hlsl");
 	m_DoubleTextureShader = new DoubleTextureShader(m_Direct3D->GetDevice(), hwnd,  L"shaders/Analglyph_vs.hlsl", L"shaders/Analglyph_ps.hlsl");
 
 
@@ -462,7 +463,7 @@ void App::CreateGUIWindow()
 				if (ImGui::BeginMenu("Shader Options"))
 				{
 					//DropDown to Select Shader
-					ImGui::Combo("Shader Select", &m_ShaderNumber, "Texture Shader\0Dissolve Shader\0Light Shader\0Manipulation Shader\0Displacement Map Shader\0Post Processing Scene\0Shadow Shader\0Tessellation\0BillBoarded Particle\0");
+					ImGui::Combo("Shader Select", &m_ShaderNumber, "Texture Shader\0Dissolve Shader\0Light Shader\0Manipulation Shader\0Displacement Map Shader\0Post Processing Scene\0Shadow Shader\0Tessellation\0BillBoarded Particle\0Explosions\0");
 
 					//Switch the GUI Based on what shader is selected (e.g. dissolve sliders will only show up when dissolve shader selected)
 					switch (m_ShaderNumber)
@@ -525,6 +526,10 @@ void App::CreateGUIWindow()
 					case kBillboardedParticle:
 					{
 						break;
+					}
+					case kExplodingModel:
+					{
+						ImGui::SliderFloat("Explosion amount", &Args->m_ExplosionAmount, 0.0f, 32.0f);
 					}
 					default:
 						break;
@@ -921,9 +926,9 @@ bool App::Render()
 	CreateGUIWindow();
 
 	//Reload the shape if certain changes are made
-	ReloadShape();
+	
 	ReloadShaderSettings();
-
+	ReloadShape();
 	//// Clear the scene. (default blue colour)
 	m_Direct3D->BeginScene(m_ClearColour.x, m_ClearColour.y, m_ClearColour.z, 1.0f);
 
@@ -994,6 +999,10 @@ bool App::Render()
 		m_Direct3D->GetDeviceContext()->GSSetShader(NULL, NULL, 0);
 		break;
 	}
+	case kExplodingModel:
+		m_GameObject->Render(m_Direct3D, m_Camera, m_ExplosionShader, m_ShaderArgs);
+		m_Direct3D->GetDeviceContext()->GSSetShader(NULL, NULL, 0);
+		break;
 	default:
 		break;
 	}
@@ -1026,7 +1035,7 @@ void App::ReloadShaderSettings()
 			ResetGameObject();
 			ResetLights();
 			ResetCamera();
-			m_ModelNumber = 0;
+			m_ModelNumber = 1;
 			ReloadShape();
 			break;
 		}

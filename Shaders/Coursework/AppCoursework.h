@@ -91,6 +91,7 @@ private:
 	DepthShader* m_DepthShader;
 	TessellationShader* m_TessellationShader;
 	GeometryShader* m_GeoShader;
+	GeometryShader* m_ExplosionShader;
 	DoubleTextureShader* m_DoubleTextureShader;
 	//Shader Arguments
 	ShaderArgs m_ShaderArgs;

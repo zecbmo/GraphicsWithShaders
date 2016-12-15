@@ -2,9 +2,9 @@
 #include "GeometryShader.h"
 
 
-GeometryShader::GeometryShader(ID3D11Device* device, HWND hwnd) : BaseShader(device, hwnd)
+GeometryShader::GeometryShader(ID3D11Device* device, HWND hwnd, WCHAR* gs_filename, WCHAR* ps_filename) : BaseShader(device, hwnd)
 {
-	InitShader(L"shaders/GeometryShader_vs.hlsl", L"shaders/GeometryShader_gs.hlsl", L"shaders/GeometryShader_ps.hlsl");
+	InitShader(L"shaders/GeometryShader_vs.hlsl", gs_filename, ps_filename);
 }
 
 
@@ -54,7 +54,8 @@ void GeometryShader::SetShaderParameters(ShaderArgs & m_ShaderArgs)
 		m_ShaderArgs.m_ViewMatrix,
 		m_ShaderArgs.m_ProjectionMatrix,
 		m_ShaderArgs.m_Texture,
-		m_ShaderArgs.m_CameraPos, m_ShaderArgs.m_CameraUpVec);
+		m_ShaderArgs.m_CameraPos, m_ShaderArgs.m_CameraUpVec,
+		m_ShaderArgs.m_ExplosionAmount);
 }
 void GeometryShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 {
@@ -97,7 +98,7 @@ void GeometryShader::InitShader(WCHAR* vsFilename, WCHAR* psFilename)
 }
 
 
-void GeometryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, XMFLOAT3 CameraPosition, XMFLOAT3 CameraUpVec)
+void GeometryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, XMFLOAT3 CameraPosition, XMFLOAT3 CameraUpVec, float offset)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -122,7 +123,7 @@ void GeometryShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, con
 	dataPtr->view = tview;
 	dataPtr->projection = tproj;
 	dataPtr->CameraPos = CameraPosition;
-	dataPtr->padding = 0;
+	dataPtr->padding = offset;
 	dataPtr->CameraUpVec = CameraUpVec;
 	dataPtr->padding2 = 0;
 	// Unlock the constant buffer.
